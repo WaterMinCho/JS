@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쿵쿵따</title>
+  </head>
+  <body>
+    <div id="container">
+      <div><span id="order">1</span>번째 참가자</div>
+      <div>
+        제시어: <span id="word"></span>
+        <span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 쿵쿵따~!</span>
+      </div>
+      <input type="text" />
+      <button>입력</button>
+    </div>
+
+    <script>
+      //몇 명이 참여할지 선택한다.
+      const number = parseInt(prompt("참가인원"), 10); //숫자로 변환 parseInt(수행, 진법); or Number(수행);
+      if (number) {
+        const $button = document.querySelector("button");
+        const $input = document.querySelector("input");
+        const $word = document.querySelector("#word"); // 데이터 변수 word에 id값이 word인 요소를 선택한다.
+        const $order = document.querySelector("#order"); // 데이터 변수 word에 id값이 order인 요소를 선택한다.
+        $input.focus();
+
+        //제시어를 저장할 변수 생성
+        let word; //제시어
+        let newWord; //새로 입력한 값
+        // 첫 번째 참가자인가?(제시어가 비어있는가?) 맞으면 입력된 단어가 제시어가 된다. 아니면 단어가 매칭되는지 확인
+
+        const onClickButton = () => {
+          if (
+            (!word || word[word.length - 1] === newWord[0]) &&
+            newWord.length === 3
+          ) {
+            // 제시어가 비어있거나 올바른가?
+            word = newWord; //데이터를 바꾸고
+            $word.textContent = word;
+            const order = parseInt($order.textContent, 10); //현재 순서를 담은 변수
+            if (order + 1 > number) {
+              // 현재 순서에서 1을 더한 값이 참여인원보다 큰가
+              $order.textContent = 1; //맞으면 1로 초기화
+            } else {
+              $order.textContent = order + 1; //아니면 다음 순서로 증가.
+            }
+          } else {
+            //올바르지 않은가
+            alert(
+              "3자리를 넘었거나 이어받기가 틀렸습니다. 다시 입력하세여~!><"
+            );
+          }
+          $input.value = ""; // 입력값의 value를 초기화.
+          $input.focus();
+        };
+
+        const onInput = (event) => {
+          newWord = event.target.value; //입력값이 newWord에 저장됨.
+        };
+
+        $button.addEventListener("click", onClickButton);
+        $input.addEventListener("input", onInput);
+      } else {
+        //prompt값이 null이면.
+        alert("게임을 다시 시작해주세요");
+        document.getElementById("container").style.display = "none"; // 화면 출력 안함.
+      }
+    </script>
+  </body>
+</html>
