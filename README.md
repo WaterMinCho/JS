@@ -47,7 +47,8 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 
 - 고차함수
   click(~~~, onClickNumber('n'));의 onClickNumber가 있는 자리는 함수자리이므로 "함수값으로 리턴된 값"이 와야한다!
-  추가로 onClickNumber()함수를 불러오면 undefined가 자동으로 도출되기 때문에 return에 함수형으로 정의해야하며, 중복제거시에 유용한 고차함수를 써서 더 줄이자!
+  추가로 onClickNumber()함수를 불러오면 undefined가 자동으로 도출되기 때문에 return에 함수형으로 정의해야하며, 중복제거시에 유용한 고차함수를 써서 더 줄이자!</br>
+
   --> 예시:
 
       ```javascript
@@ -58,41 +59,45 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
          }
       ```
 
-  중괄호와 리턴을 생략할 수 있으니 요놈이
+  중괄호와 리턴을 생략할 수 있으니 요놈이</br>
 
-      ```javascript
-      const fuc =(msg) => () =>{
-              console.log(msg);
-          }
-      ```
-      이렇게 바뀌는데 이러한 코드를 보면 항상 머리로만 하지 말고 직접 쳐보고 비교해보는 버릇을 기르자. 원리는 이렇다.
-      ```javascript
-      const fuc =(msg) => "{"
-          "return"() =>{
-              console.log(msg);
-          }
-      "}"
-      ```
-      위와 같이 쿼테이션으로 묶은 부분을 제거한거다.
+  ```javascript
+  const fuc = (msg) => () => {
+    console.log(msg);
+  };
+  ```
+
+  이렇게 바뀌는데 이러한 코드를 보면 항상 머리로만 하지 말고 직접 쳐보고 비교해보는 버릇을 기르자. 원리는 이렇다.</br>
+
+  ```javascript
+  const fuc =(msg) => "{"
+  "return"() =>{
+     console.log(msg);
+     }
+  "}"
+  ```
+
+  </br>
+       위와 같이 쿼테이션("")으로 묶은 부분을 제거한거다.
 
 - event: click시 함수가 호출되면 브라우저가 onClickNumber()식으로 함수를 실행하는데, 그때 인자값으로 event를 넣어주는데 그때 함수에 event가 전달된다.
 
 - 중첩 반복문 해결하는 법
 
-      ```javascript
-      function test(){
-         let result = '';
-         if(a){
-            if(!b){
-               result = 'c';
-               }
-            }else{
-               result='a';
-            }
-            result +='b';
-            return result;
-            }
-       ```
+  ```javascript
+  function test() {
+    let result = "";
+    if (a) {
+      if (!b) {
+        result = "c";
+      }
+    } else {
+      result = "a";
+    }
+    result += "b";
+    return result;
+  }
+  ```
 
 1. 'if문 다음에 나오는' 공통된 절차를 각 분기점 내부에 넣는다.
 
