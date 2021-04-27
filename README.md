@@ -1,4 +1,4 @@
-### JavaScript
+# JavaScript
 
 Study for javascript by WaterMincho.
 민초의 자바공부.
@@ -9,13 +9,13 @@ Study for javascript by WaterMincho.
 
 1stJsStudy.html
 
-# 배운 개념: 선택자$는 태그를 변수에 넣을 때 사용한다., hide, show.
+### 배운 개념: 선택자$는 태그를 변수에 넣을 때 사용한다., hide, show.
 
 ## 끝말잇기
 
 word-relay.html
 
-# 배운 개념
+### 배운 개념
 
 addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, parseInt.
 
@@ -26,14 +26,14 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 
 ## 계산기
 
-# 플로우
+### 플로우
 
 1. 시작 -> 숫자 1을 저장할 변수생성 -> 연산자를 저장할 변수생성 -> 숫자2를 저장할 변수생성 -> 대기
 2. 숫자 버튼 클릭 -> 숫자를 변수에 저장한다{operator변수가 비어있는가 ? numOne=숫자 : numTow=숫자} -> 대기
 3. 연산자 버튼 클릭 ->numOne값이 존재하는가? 연산자를 변수에 저장한다:alert('연산자를 입력해주세요') -> 대기
 4. =버튼 클릭 -> numTwo값이 존재하는가? 숫자1과2를 연산자를 적용하여 계산한다: alert('두번째 수를 입력해주세요')-> 계산 결과를 화면에 출력한다. -> 끝
 
-# 배운 개념
+### 배운 개념
 
 - 변수를 바꾸면 화면을 바꾸는 것을 까먹지 말자! --> $result.value += "0";
 
