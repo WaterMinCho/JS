@@ -77,7 +77,7 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
   "}"
   ```
 
-       위와 같이 쿼테이션("")으로 묶은 부분을 제거한거다.
+  위와 같이 쿼테이션("")으로 묶은 부분을 제거한거다.
 
 - event: click시 함수가 호출되면 브라우저가 onClickNumber()식으로 함수를 실행하는데, 그때 인자값으로 event를 넣어주는데 그때 함수에 event가 전달된다.
 
