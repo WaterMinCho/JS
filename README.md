@@ -49,15 +49,15 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
   click(~~~, onClickNumber('n'));의 onClickNumber가 있는 자리는 함수자리이므로 "함수값으로 리턴된 값"이 와야한다!
   추가로 onClickNumber()함수를 불러오면 undefined가 자동으로 도출되기 때문에 return에 함수형으로 정의해야하며, 중복제거시에 유용한 고차함수를 써서 더 줄이자!</br>
 
-  --> 예시:
+  예시:
 
-      ```javascript
-      const fuc =(msg) => {
-         return() =>{
-            console.log(msg);
-            }
-         }
-      ```
+  ```javascript
+  const fuc = (msg) => {
+    return () => {
+      console.log(msg);
+    };
+  };
+  ```
 
   중괄호와 리턴을 생략할 수 있으니 요놈이</br>
 
@@ -77,7 +77,6 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
   "}"
   ```
 
-  </br>
        위와 같이 쿼테이션("")으로 묶은 부분을 제거한거다.
 
 - event: click시 함수가 호출되면 브라우저가 onClickNumber()식으로 함수를 실행하는데, 그때 인자값으로 event를 넣어주는데 그때 함수에 event가 전달된다.
