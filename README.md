@@ -213,15 +213,14 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 
 
 - **indexOf와 includes**
-
- - ```javascript
-  "2345".indexOf(3) === 1;
-  "2345".indexOf(6) === -1;
-  ["2", "3", "4", "5"].indexOf("5") === 3;
-  ["2", "3", "4", "5"].indexOf(5) === -1; // 요소의 자료형까지 같아야함.
-  "2345".includes(3) === true;
-  ["2", "3", "4", "5"].includes(5) === false;
-  ```
+  - ```javascript
+      "2345".indexOf(3) === 1;
+      "2345".indexOf(6) === -1;
+      ["2", "3", "4", "5"].indexOf("5") === 3;
+      ["2", "3", "4", "5"].indexOf(5) === -1; // 요소의 자료형까지 같아야함.
+      "2345".includes(3) === true;
+      ["2", "3", "4", "5"].includes(5) === false;
+      ```
 
     - 공통점
       - 배열이나 문자열에 원하는 값이 들어있는지 찾는 메서드.
@@ -234,7 +233,7 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
     return alert("중복되지 않게 입력해주세요");
     }
   ```
-  
+
   - *new Set(input).size !== 4*
     - _Set은 중복을 허용하지 않는 특수한 배열이다._
     - new Set('1231')을 하면 Set 내부에는 1,2,3만 들어간다. 그러므로 위의 코드에 중복이 없다면 4가 나오지만 중복이 있다면 4보다 작은 값이 나올 것이다.
