@@ -220,10 +220,11 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 ["2", "3", "4", "5"].includes(5) === false;
 ```
 
-- 공통점
-  - 배열이나 문자열에 원하는 값이 들어있는지 찾는 메서드.
-- indexOf: 원하는 값이 들어있다면 해당 인덱스까지 알려주고, _들어있지 않다면 -1반환_
-- includes: 더 직관적으로 true/false를 반환한다.
+<!--prettier-ignore-->
+  - 공통점
+    - 배열이나 문자열에 원하는 값이 들어있는지 찾는 메서드.
+  - indexOf: 원하는 값이 들어있다면 해당 인덱스까지 알려주고, _들어있지 않다면 -1반환_
+  - includes: 더 직관적으로 true/false를 반환한다.
 
 - ```javascript
   if (new Set(input).size !== 4) {
