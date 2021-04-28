@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>숫자야구</title>
+  </head>
+  <body>
+    <form id="form">
+      <input type="text" id="input" placeholder="답을 입력해주세요" />
+      <button>확인</button>
+    </form>
+    <div id="logs"></div>
+    <script>
+      /*
+      1. 1~9 중에서 중복되지 않게 네 개의 숫자를 고른다.
+      2. 입력값엔 10번의 기회가 주어지고 상대편이 고른 숫자 네 개를 맞히면 된다.
+      3. 이 때 숫자만 맞히는 것이 아니라 숫자의 순서까지 맞혀야 한다.
+      4. 틀릴 때마다 맞힌 숫자의 개수(볼), 숫자와 순서 둘 다 맞힌 개수(스트라이크)를 알려준다.
+      ex) 5728을 뽑았다고 가정해보자. 입력값에 7129를 입력하면 1스트라이크, 1볼이라고 말한다.
+          마찬가지로 7528을 입력하면 2스트라이크 2볼이 되고, 7285를 말하면 4볼이 된다. 5728을 말하면 4스트라이크가 되서 이기게 된다.
+      5. 10번의 기회 안에 맞히지 못하면 상대편이 승리한다.
+          */
+      const $input = document.querySelector("#input");
+      const $form = document.querySelector("#form");
+      const $logs = document.querySelector("#logs");
+
+      const numbers = []; //[1,2,3,4,5,6,7,8,9]
+      const answer = [];
+      const randAnswer = () => {
+        for (let n = 0; n < 9; n++) {
+          numbers.push(n + 1); // numbers에 1부터 9까지 push
+        }
+
+        for (let n = 0; n < 4; n++) {
+          //숫자 네 개 선택.
+          const index = Math.floor(Math.random() * (numbers.length - n)); //number의 배열크기만큼 numbers.length-n으로 index범위 생성.
+          answer.push(numbers[index]); //랜덤으로 나온 index자리에 해당하는 number에 숫자를 뽑 은 값을 answer배열에 push.
+          numbers.splice(index, 1); // splice로 원래 number 배열에서 뽑힌 숫자를 배열에서 제거한다.
+        }
+        console.log(answer);
+      };
+      randAnswer();
+
+      const tries = [];
+      const checkInput = (input) => {
+        //검사하는 코드
+        if (input.length !== 4) {
+          //길이는 4가 아닌가
+          return alert("4자리 숫자를 입력해주세요");
+        }
+        if (new Set(input).size !== 4) {
+          //중복된 숫자가 있는가
+          return alert("중복되지 않게 입력해주세요");
+        }
+        if (tries.includes(input)) {
+          //이미 시도한 값은 아닌가
+          return alert("이미 시도한 값입니다.");
+        }
+        return true; // 모든 에러가 아니라면 true값 반환.
+      };
+
+      const defeated = () => {
+        $logs.append(
+          `패배! 정답은 ${answer.join("")}`,
+          document.createElement("br")
+        );
+        initAll();
+      };
+
+      const initAll = () => {
+        value = 0;
+        out = 0;
+        strike = 0;
+        ball = 0;
+        answer.splice(0, answer.length);
+        numbers.splice(0, numbers.length);
+        randAnswer();
+        tries.splice(0, tries.length);
+      };
+
+      let out = 0; //out카운트 추가.
+      $form.addEventListener("submit", (event) => {
+        event.preventDefault(); //기본 동작 막기(메소드이며 form태그의 기본동작인 깜빡거림을 막을 수 있다.)
+        const value = $input.value; //입력하면 변수에 저장하고
+        $input.value = ""; //글자를 지워주고
+
+        if (!checkInput(value)) {
+          //에러 있을 때
+          return;
+        }
+
+        //prettier-ignore
+        if (answer.join('') === value) {
+          //입력값 문제없음
+          $logs.innerHTML = "홈런!"+`<br/>`;
+          initAll();
+          return;
+        }
+
+        //prettier-ignore
+        if (tries.length >= 9) {
+          //10번째에 실패하면 = tries에 10번째 값이 들어갔다면
+          defeated();
+          return;
+        }
+        //몇 스트라이크 몇 볼인지 검사
+        let strike = 0;
+        let ball = 0;
+        for (let i = 0; i < answer.length; i++) {
+          const index = value.indexOf(answer[i]); //indexOf는 겹치는게 없으면 -1값 반환.
+          if (index > -1) {
+            //일치하는 숫자 발견
+            if (index === i) {
+              // 일치하고 자릿수도 같음.
+              strike += 1;
+            } else {
+              //숫자만 같음.
+              ball += 1;
+            }
+          }
+        }
+        if (strike === 0 && ball === 0) {
+          //몇 아웃인지 검사
+          out++;
+          $logs.append(
+            `${value}:${strike} 스트라이크 ${ball} 볼 ${out} 아웃`,
+            document.createElement("br")
+          );
+        } else {
+          $logs.append(
+            `${value}:${strike} 스트라이크 ${ball} 볼 ${out} 아웃`,
+            document.createElement("br")
+          );
+        }
+        if (out === 3) {
+          defeated();
+          return;
+        }
+        tries.push(value);
+      });
+    </script>
+  </body>
+</html>
