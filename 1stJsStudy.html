@@ -37,8 +37,8 @@
       <div>
         지역:
         <select id="city" onchange="changeCity();">
-          <!-- <option value="02" selected>서울</option>
-          <option value="064">제주</option> -->
+          <option value="02" selected>서울</option>
+          <option value="064">제주</option>
         </select>
       </div>
       <div>테스트: <input type="text" id="test" value="" /></div>
@@ -65,21 +65,22 @@
         // alert(document.getElementById("name").value); // element에 value갖고오겠다.
         // alert(document.getElementById("city").value); // element에 value갖고오겠다.(02,064)
         // document.getElementById("name"); //document 내의 element에 접근할거야. "ID"를 사용해서.
-        alert($("#name").val()); // element에 value갖고오겠다.(inputText값)
-        alert($("#city").val()); // element에 value갖고오겠다.(02,064)
 
         let obj = {}; // 선언하는 시점에 굳이 키 안잡아도 알아서 추가로 잡을 수 있음. + 오브젝트 안에 배열, 오브젝트 등 모두 가능.
 
         obj.name = $("#name").val();
         obj.city = $("#city").val();
 
+        alert($("#name").val()); // element에 value갖고오겠다.(inputText값)
+        alert($("#city").val()); // element에 value갖고오겠다.(02,064)
+
         printConsole(obj);
         // printConsole2(name, city);
       }
 
       function loadCity(city) {
-        //아래 city배열을 없애도 하단 let = city정리한 값을 파라미터로 가져와도 로드가 됨.
-        //배열 안에 배열, 오브젝트 등 모두 가능.
+        // 아래 city배열을 없애도 하단 let = city정리한 값을 파라미터로 가져와도 로드가 됨.
+        // 배열 안에 배열, 오브젝트 등 모두 가능.
         // let city = [
         //   {
         //     code: "02",
@@ -128,8 +129,6 @@
         // $("#city").append('<option value ="02" selected>서울</option>');
         // $("#city").append('<option value ="064">제주</option>');
       }
-
-      loadCity();
 
       function printConsole(data) {
         console.log(data);
