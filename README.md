@@ -185,7 +185,7 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 ### 플로우
 
 - 최초 플로우
-  <img src="D:\캡쳐/2021-04-29 02 09 12.png" width="600px" height ="500px" alt = "algorithm"></img><br/>
+  ![2021-04-29 02 09 12](https://user-images.githubusercontent.com/74204327/116469803-922a8200-a8ad-11eb-80d5-03abfac0124a.png)
 
 - 두 번째 플로우(3진 아웃 추가)
   <img src="D:\캡쳐/2021-04-29 04 26 23.png" width="600px" height ="500px" alt = "algorithm"></img><br/>
