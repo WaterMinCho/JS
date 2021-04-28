@@ -196,21 +196,22 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 
 - event.preventDefault(); //기본 동작 막기(메소드이며 form태그의 기본동작인 깜빡거림을 막을 수 있다.)
 
+
 - form태그의 event.target은 배열 식으로 내부 요소들에 접근이 가능하다.
   예를 들면 event.target[0], event.target[1]식으로 각각의 요소를 SELECT할 수 있다.
 
-- ```javascript
-  for (let n = 0; n < 4; n++) {
-    const index = Math.floor(Math.random() * (numbers.length - n));
-    answer.push(numbers[index]);
-    numbers.splice(index, 1);
-  }
-  ```
 
-  - 무작위로 숫자를 뽑을 때는 Math.random메서드를 사용한다. 단, 뽑은 값은 정수가 아니므로 정수가 필요할 때는 Math.floor나 Math.ceil같은 메서드를 사용해 정수로 바꿔야 한다.
+```javascript
+for (let n = 0; n < 4; n++) {
+  const index = Math.floor(Math.random() * (numbers.length - n));
+  answer.push(numbers[index]);
+  numbers.splice(index, 1);
+}
+```
+- 무작위로 숫자를 뽑을 때는 Math.random메서드를 사용한다. 단, 뽑은 값은 정수가 아니므로 정수가 필요할 때는 Math.floor나 Math.ceil같은 메서드를 사용해 정수로 바꿔야 한다.
+
 
 - **indexOf와 includes**
-
 ```javascript
 "2345".indexOf(3) === 1;
 "2345".indexOf(6) === -1;
@@ -219,39 +220,37 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
 "2345".includes(3) === true;
 ["2", "3", "4", "5"].includes(5) === false;
 ```
-
-<!--prettier-ignore-->
   - 공통점
     - 배열이나 문자열에 원하는 값이 들어있는지 찾는 메서드.
   - indexOf: 원하는 값이 들어있다면 해당 인덱스까지 알려주고, _들어있지 않다면 -1반환_
   - includes: 더 직관적으로 true/false를 반환한다.
 
-- ```javascript
+
+```javascript
   if (new Set(input).size !== 4) {
-    return alert("중복되지 않게 입력해주세요");
+  return alert("중복되지 않게 입력해주세요");
   }
-  ```
-
-  - **new Set(input).size !== 4**
-
+```
+  - *new Set(input).size !== 4*
     - _Set은 중복을 허용하지 않는 특수한 배열이다._
     - new Set('1231')을 하면 Set 내부에는 1,2,3만 들어간다. 그러므로 위의 코드에 중복이 없다면 4가 나오지만 중복이 있다면 4보다 작은 값이 나올 것이다.
     - Set의 길이를 구할 때는 .length가 아닌 .size로 배열의 길이를 잰다.
+  - *alert함수는 undefined를 return한다.* 즉 return undefined와 같고, undefined는 if문에서는 false로 처리하므로 checkInput()함수에 false로 반환한다.
 
-  - _alert함수는 undefined를 return한다._ 즉 return undefined와 같고, undefined는 if문에서는 false로 처리하므로 checkInput()함수에 false로 반환한다.
 
-- ```javascript
+
+```javascript
   if (answer.join("") === value) {
     $logs.textContent = "홈런!";
     return;
   }
-  ```
-
+```
   - .join()
     - 배열을 문자열로 바꾸는 메소드.
     - ('')하면 [3,1,4,5]라는 배열이 '3145'라는 문자열로 바뀜. 안하면 '3,1,4,5'로 불러옴.<기본 값 = (',')>
 
-- ```javascript
+
+```javascript
   if (tries.length >= 9) {
     const message = document.createTextNode(
       "패배. 정답은 ${answer.join("")}"
@@ -259,7 +258,7 @@ addEventListener(이벤트종류,'함수'), querySelector, querySelectorAll, par
       $logs.appendChild(message);
       return;
       }
-  ```
+```
   - tries.length>=를 한 이유: tries=[]에 9개가 차 있다면, 10번째 시도 내에서 성공하면 홈런이고 9개가 이미 차있는 상태에서 10번째 시도했을 때 결국 성공하지 못했다면 패배로 출력하도록 하기 위함이다.
   - .append()
     - append메서드는 새로 만들고 싶은 값을 바로 옆에 추가한다.
