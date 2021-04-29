@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로또 추첨기</title>
+    <style>
+      .ball {
+        display: inline-block;
+        border: 1px solid black;
+        border-radius: 20px;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 20px;
+        text-align: center;
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--prettier-ignore-->
+    <div id="result">추첨 결과는? </div>
+    <!--prettier-ignore-->
+    <div id="bonus">보너스: </div>
+
+    <script>
+      const candidate = Array(45) // 1부터 45까지의 순차배열 초기화.
+        .fill()
+        .map((v, i) => i + 1);
+
+      console.log(`candidate: ${candidate}`);
+      const shuffled = [];
+      /**************for문 적용*************
+
+      for(let i=candidate.length;i>0;i--){
+          const random = Math.floor(Math.random()*i);
+          const spliceArray = candidate.splice(random, 1);
+          const value = spliceArray[0];
+          shuffled.push(value);
+      }
+      */
+      /*피셔-예이츠 셔플 알고리즘
+        집합이 존재하고 그 집합을 랜덤으로 돌려서 별도의 배열에 대입.
+        왜 while문을 썼는가? 어쩔 때 for문이 좋고 어쩔 때 while문이 좋은가?
+        답: 조건이 간단하거나 몇번 반복할지 모를 때 while문을 쓴다.
+        */
+      while (candidate.length > 0) {
+        const random = Math.floor(Math.random() * candidate.length); //무작위 인덱스 뽑기.
+        const spliceArray = candidate.splice(random, 1); //무작위 인덱스로 뽑은 값은 spliceArray배열에 들어있다.
+        const value = spliceArray[0]; //배열에 들어있는 값을 꺼낸다.
+        shuffled.push(value); //shuffle배열에 삽입.
+      }
+      // console.log(`candidate: ${candidate}`); // splice했기 때문에 빈 배열.
+      console.log(`shuffled: ${shuffled}`); // 모두 섞인 후 push.
+
+      const winBalls = shuffled.slice(0, 6).sort((a, b) => a - b); //0번째 인덱스부터 6개를 자르고(원본은 변하지 않는다. map도 마찬가지.) 정렬.
+      const bonus = shuffled[6]; //7번째 보너스 가져온다.
+      console.log(`winBalls: ${winBalls}, bonus: ${bonus}`);
+
+      const $result = document.querySelector("#result");
+      const $bonus = document.querySelector("#bonus");
+      const drawBall = (number, $parent) => {
+        const $ball = document.createElement("div");
+        $ball.className = "ball"; //tag.className이 ball. html에선 그냥 class지만 자바스크립트에서는 className
+        $ball.textContent = number;
+        $parent.appendChild($ball);
+      };
+
+      for (let i = 0; i < winBalls.length; i++) {
+        setTimeout(() => {
+          drawBall(winBalls[i], $result);
+        }, (i + 1) * 1000); //1초 뒤에 실행
+      }
+      setTimeout(() => {
+        drawBall(bonus, $bonus);
+      }, 7000);
+    </script>
+  </body>
+</html>
