@@ -7,20 +7,20 @@ Study for javascript by WaterMincho.<br>
 ---
 <br>
 
-## 자바스크립트 기초 
+## **자바스크립트 기초** 
 ### `2021.04.23 1stJsStudy.html` <br><br>
 
-### 배운 개념
+### **배운 개념**
 
 - 선택자$는 태그를 변수에 넣을 때 사용한다., hide, show.
 
 ---
 <br>
 
-## 끝말잇기 
+## **끝말잇기** 
 ### `2021.04.23 word-relay.html / kungkungdda.html` <br><br>
 
-### 배운 개념
+### **배운 개념**
 
 `addEventListener(이벤트종류,'함수')`, `querySelector`, `querySelectorAll`, `parseInt`.
 
@@ -28,18 +28,19 @@ Study for javascript by WaterMincho.<br>
   고로 난 천재가 아니니 문제 생기면 순서도 그리자.
 
 ---
+<br>
 
-## 계산기 
+## **계산기** 
 ### `2021.04.28 calculator.html`<br><br> 
 
-### 플로우
+### **플로우**
 
 1. 시작 -> 숫자 1을 저장할 변수생성 -> 연산자를 저장할 변수생성 -> 숫자2를 저장할 변수생성 -> 대기
 2. 숫자 버튼 클릭 -> 숫자를 변수에 저장한다{operator변수가 비어있는가 ? numOne=숫자 : numTow=숫자} -> 대기
 3. 연산자 버튼 클릭 ->numOne값이 존재하는가? 연산자를 변수에 저장한다:alert('연산자를 입력해주세요') -> 대기
 4. =버튼 클릭 -> numTwo값이 존재하는가? 숫자1과2를 연산자를 적용하여 계산한다: alert('두번째 수를 입력해주세요')-> 계산 결과를 화면에 출력한다. -> 끝
 
-### 배운 개념
+### **배운 개념**
 
 - 변수를 바꾸면 화면을 바꾸는 것을 까먹지 말자! --> `$result.value += "0";`
 
@@ -193,11 +194,12 @@ Study for javascript by WaterMincho.<br>
 - -, \*, /는 문자열이 저절로 숫자로 바뀌기 때문에 `parseInt`를 안써도 된다.
 
 ---
+<br>
 
-## 숫자야구 
+## **숫자야구** 
 ### `2021.04.29 number-baseball.html`<br><br>
 
-### 플로우
+### **플로우**
 
 - 최초 플로우
 
@@ -207,7 +209,7 @@ Study for javascript by WaterMincho.<br>
 
   <p align = "center"><img src =https://user-images.githubusercontent.com/74204327/116470169-02390800-a8ae-11eb-85be-4fb506e2cde9.png width=500px></p>
 
-### 배운 개념
+### **배운 개념**
 
 - event.preventDefault(); //기본 동작 막기(메소드이며 form태그의 기본동작인 깜빡거림을 막을 수 있다.)
 
@@ -287,15 +289,15 @@ Study for javascript by WaterMincho.<br>
 
     ---
 
-## 로또 추첨기(feat.비동기)
+## **로또 추첨기(feat.비동기)**
 ### `lotto.html / lotto-self.html 2021.04.30`<br><br>
 
-### 플로우
+### **플로우**
 
 - 
 <p align="center"><img src = https://user-images.githubusercontent.com/74204327/116583260-213ca600-a951-11eb-9e37-6febac5a2ac8.png height = 400px width = 140px></p>
 
-### 배운 개념
+### **배운 개념**
 
 - ***비동기란***
   - 코딩한 순서와 다르게 동작하는 코드.(ex.EventListener(), setTimeout()...)
@@ -600,3 +602,132 @@ Study for javascript by WaterMincho.<br>
     그래도 ~~난 개발지식이 태아수준이라~~ 현상 자체는 알아야 한다.<br>
     함수랑 함수 자체를 바깥에 있는 변수들을 통틀어 `클로저`라 칭하고 그 `클로저`와 `variable`이 만나면 위의 문제가 발생할 수 있다. 근데 모든 케이스가 그렇지 않고 조건이 껴있다. 바로 `비동기`다. <br> 
     즉 **`함수 스코프를 지닌 variable` 과 `비동기함수`가 만나면 `클로저`문제가 발생한다.** 그렇다고 무조건 `let`을 쓰는것은 좋지 않다 왜냐하면 레거시에서 `var`을 쓰는 경우가 있기 때문에 해당 현상에 대해선 설명할 수 있어야 한다. <br>
+
+
+    ---
+    <br>
+
+    ## **가위바위보**
+    ### `rsp.html 2021.04.30`<br><br>
+    
+    ### **플로우**
+    - 
+    <p align="center"><img src = https://user-images.githubusercontent.com/74204327/116676173-9f488d80-a9e1-11eb-846d-c43c20ec34f6.png height = 300px width = 180px></p>
+
+    ### **배운 개념**
+
+    - `style.background`
+      -  <code>$computer.style.background = `url(${IMG_URL}) 0 0`;</code><br>
+      스타일의 `background`는 `이미지 X좌표 Y좌표값`을 입력할 수 있다.
+    
+    - ```javascript
+      const rspX = {
+        scissors: "0",
+        rock: "- 230px",
+        paper: "-440px",
+      };
+      ```
+      위와 같이 공통된 속성을 지닌 변수의 모임은 객체로 묶어주는 것이 현명하다.
+    
+    - ```javascript
+          $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+          $computer.style.backgroundSize = "auto 200px";
+      ```
+      - `rspX.computerChoice`하면 안된다. 왜냐하면 rspX객체엔 `computerChoice`라는 문자열 속성이 없기 때문에 `rspX[computerChoice]`로 선택해야 한다.
+    
+      -  `background`를 수정할 때마다 `size도 초기화`되기 때문에 `항상 background와  backgroundSize는 붙어있어야 한다.`
+      
+    - `setInterval(함수,반복간격(ms));`
+      - `setInterval`함수는 `return`값이 존재한다. 그 값은 타이머에 대한 `아이디(숫자)`로 해당 값을 사용하여 타이머를 제거할 수 있다.
+      - `setInterval을 취소`할 수 있는 방법으로 `clearInterval`을 제공한다. <br>`let ID= setInterval(함수,ms)`
+      - `setTimeout`함수도` clearTimeout`으로 제거할 수 있지만 `setTimeout`함수 내의 인수로 넣은 함수가 실행되기 전에 `clearTimeout`을 호출해야 한다.
+
+    - ### **버그**
+      ```javascript
+      const clickButton = () => {
+        //버튼을 눌렀을 때
+        clearInterval(intervalId); // 타이머 멈춤.
+        //점수 계산 및 화면 표시
+        setTimeout(() => {
+          intervalId = setInterval(changeComputerHand, 50); //타이머를 만들 때마다 변수에 저장한 후에 clearInterval해야 한다.
+        }, 1000); //1초 뒤에 다시 setInterval.
+      };
+
+      $rock.addEventListener("click", clickButton);
+      $scissors.addEventListener("click", clickButton);
+      $paper.addEventListener("click", clickButton);
+      ```
+      - 여기서, `setTimeout`설정값 1초 내에 여러 번 클릭하면 그림이 빠르게 돌아간다. 그 후에 버튼을 클릭하면 그림이 멈추지 않는다.<br>
+      버튼을 클릭할 떄마다 각각 `setTimeout`타이머가 여러 개 실행되기 떄문이다.
+      - 버튼클릭을 하면 `clearInterval`을 수행하므로 문제없다고 생각할 수도 있다.<br>
+      하지만 버튼은 `setInterval`을 멈추는 `clearInterval`을 수행할 뿐 `setTimeout`을 멈추는 `clearTimeou`t을 수행하지는 않아서 `버튼을 누른 횟수만큼 setTimeout타이머가 실행되고 각각1초 뒤에 setInterval을 하게 되어 그림이 빠르게 돌아가는거다.`<br><br>
+
+      - ### **가정**
+        1. `clickButton`을 1초 내에 10번을 눌렀다.<br>
+        2. `interval`의 ID인덱스로 따지면 10개가 생기지만 덮어씌우는 방식이기 때문에 마지막 인덱스를 `intervalID변수`에 넣고 있다.<br>
+        3. 1초 뒤에 버튼을 클릭하면 마지막 인덱스만 클리어된다.<br><br>
+
+      - ### **해결 방법**
+        1. `clearInterval함수 한번 더 사용.`(추천)
+      `clickButton`이 실행되는 최초에 한번 클리어하고<br>
+      1초 뒤 실행되는 `setTimeout`에 한번 더 클리어를 하면<br>
+      1초루프동안마다 클리어가 반복되므로 해결됨. 
+        ```javascript
+          const clickButton = () => {
+              clearInterval(intervalId);
+
+              setTimeout(() => {
+                clearInterval(intervalId);//추가.
+                intervalId = setInterval(changeComputerHand, 50);
+                }, 1000);
+            };
+            $rock.addEventListener("click", clickButton);
+            $scissors.addEventListener("click", clickButton);
+            $paper.addEventListener("click", clickButton);
+        ```
+        
+        2. `removeEventListener메서드 사용(비추천: 실수하기 쉬움)`<br>
+        이유: <code>func() !== func()</code>라는<u>(객체 참조관계)</u> 개념을 사용하여 `addEventListener`와 `removeEventListener`내의 해결 법: 함수가 같아야 제거가 되는데 같지 않기 때문에 제거가 안되는 점을 놓치기 때문.<br>
+        <code>func() === func()</code>값이 `false`를 반환하기 때문에 객체(함수)를 번수에 넣으면 비교할 수 있다.<br>
+        참고) 참조관계를 유지하고 싶으면 변수에 넣으면 된다!
+
+        ```javascript
+          const clickButton = () => {
+              $rock.removeEventListener("click", clickButton);//추가.
+              $scissors.removeEventListener("click", clickButton);//추가.
+              $paper.removeEventListener("click", clickButton);//추가.
+              //clickButton이 실행되는 최초에 한번 제거
+
+              setTimeout(() => {
+                $rock.addEventListener("click", clickButton);//추가.
+                $scissors.addEventListener("click", clickButton);//추가.
+                $paper.addEventListener("click", clickButton);//추가.
+               //1초 뒤 실행되는 setTimeout마다 실행
+                intervalId = setInterval(changeComputerHand, 50);
+                }, 1000);
+            };
+            $rock.addEventListener("click", clickButton);
+            $scissors.addEventListener("click", clickButton);
+            $paper.addEventListener("click", clickButton);
+        ```
+        3. `플레그 변수 사용`(추천)
+
+        ```javascript
+        let clickable = true;//추가.
+        const clickButton = ()=>{
+          if(clickable){
+              clearInterval(intervalId);
+              clickable=false;//추가.
+              setTimeout(() => {
+                  clickable=true;//추가.
+                  intervalId = setInterval(changeComputerHand, 50);
+                }, 1000); 
+            }
+        }
+        ```
+        <br>
+    - **<code>diff === '고양이' || diff === '사자' || diff === '강아지' || diff === '거북이'</code><br>**
+    위와 같은 경우는 아래와 같이 바꿀 수 있다.<br>
+    **<code>['고양이','사자','강아지','거북이']. includes(diff)</code>**<br>
+    또는<br>
+    **<code>['고양이','사자','강아지','거북이']. indexOf(diff) > -1</code>**<br>

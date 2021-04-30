@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>가위바위보</title>
+    <style>
+      #computer {
+        width: 165px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="computer"></div>
+    <button id="scissors" class="btn">가위</button>
+    <button id="rock" class="btn">바위</button>
+    <button id="paper" class="btn">보</button>
+
+    <div id="score">0</div>
+
+    <script>
+      const $computer = document.querySelector("#computer");
+      const $score = document.querySelector("#score");
+      const $rock = document.querySelector("#rock");
+      const $scissors = document.querySelector("#scissors");
+      const $paper = document.querySelector("#paper");
+      const IMG_URL = "./assets/rsp.png";
+      $computer.style.background = `url(${IMG_URL}) 0 0`; //이미지 url과 x좌표, y좌표값을 지정할 수 있다.
+      $computer.style.backgroundSize = "auto 200px";
+
+      const rspX = {
+        //같은 X좌표라는 공통된 속성을 지닌 변수의 모임이기에 객체로 묶어준다.
+        scissors: "0", //가위
+        rock: "- 230px", //바위
+        paper: "-440px", //보
+      };
+      let computerChoice = "scissors";
+
+      const changeComputerHand = () => {
+        if (computerChoice === "scissors") {
+          //가위
+          computerChoice = "rock";
+        } else if (computerChoice === "rock") {
+          //바위
+          computerChoice = "paper";
+        } else {
+          //보
+          computerChoice = "scissors";
+        }
+        //rspX.computerChoice하면 안된다. 왜냐하면 rspX객체엔 computerChoice라는 속성이 없기 때문이다.
+        //background를 수정할 때마다 size도 초기화되기 때문에 항상 background와  backgroundSize는 붙어있어야 한다.
+        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+        $computer.style.backgroundSize = "auto 200px";
+      };
+
+      let intervalId = setInterval(changeComputerHand, 50);
+      //setInterval(함수,반복간격(ms));
+      //setInterval을 취소할 수 있는 방법으로 clearInterval을 제공한다. let ID= setInterval(함수,ms)
+      const scoreTable = {
+        rock: 0,
+        scissors: 1,
+        paper: -1,
+      };
+
+      let clickable = true;
+      const clickButton = () => {
+        //버튼을 눌렀을 때
+        if (clickable) {
+          clearInterval(intervalId); // 타이머 멈춤.
+          clickable = false;
+          //점수 계산 및 화면 표시
+          //유저가 선택한 값을 event.target로 textContent 또는 id값으로 "가위", "바위", "보"인지 알 수 있다.
+          const myChoice =
+            event.target.textContent === "바위"
+              ? "rock"
+              : event.target.textContent === "가위"
+              ? "scissors"
+              : "paper";
+
+          const myScore = scoreTable[myChoice];
+          const computerScore = scoreTable[computerChoice];
+          const diff = myScore - computerScore;
+
+          let totalScore = 0;
+          let message;
+          // 2,-1은 승리조건이고, -2,1은 패배조건
+          if (diff === 2 || diff === -1) {
+            totalScore += 1;
+            message = "승리";
+            console.log("승리");
+          } else if (diff === -2 || diff === 1) {
+            totalScore -= 1;
+            message = "패배";
+            console.log("패배");
+          } else if (diff === 0) {
+            message = "무승부";
+            console.log("무승부");
+          }
+          $score.textContent = `${message} 총: ${totalScore}점`;
+
+          setTimeout(() => {
+            clickable = true;
+            intervalId = setInterval(changeComputerHand, 50); //타이머를 만들 때마다 변수에 저장한 후에 clearInterval해야 한다.
+          }, 1000); //1초 뒤에 다시 setInterval.
+        }
+      };
+
+      $rock.addEventListener("click", clickButton);
+      $scissors.addEventListener("click", clickButton);
+      $paper.addEventListener("click", clickButton);
+      /*버그 발생
+      가정: clickButton을 1초 내에 10번을 눌렀다
+      interval의 ID인덱스로 따지면 10개가 생기지만 덮어씌우는 방식이기 때문에 마지막 인덱스를 intervalID변수에 넣고 있다.
+      1초 뒤에 버튼을 클릭하면 마지막 인덱스만 클리어된다.
+      */
+    </script>
+  </body>
+</html>
