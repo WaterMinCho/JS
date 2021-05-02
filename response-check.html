@@ -63,15 +63,21 @@
           endTime = new Date();
           result = endTime - startTime;
           records.push(result);
-          const average = records.reduce((a, c) => a + c) / records.length; //평균값 구하기.
-          $result.textContent = `현재: ${result}ms, 평균: ${average}ms`;
+          const average =
+            records.reduce((a, c) => a + c) / records.length / 1000; //평균값 구하기.
+          console.log(`평균(ms): ${average}ms`);
+          let averageToFixed = average.toFixed(4);
+          $result.textContent = `현재: ${
+            result / 1000
+          }초, 평균: ${averageToFixed} 초`;
           topFive = records.sort((p, c) => p - c).slice(0, 5); //오름차순 정렬
           topFive.forEach((top, index) => {
             //topFive에 작은것 부터 정렬된걸 forEach로 $result에 대입.
             $result.append(
               document.createElement("br"),
-              `${index + 1}위: ${top}ms`
+              `${index + 1}위: ${top / 1000}초`
             );
+            console.log(`${index + 1}위: ${top}ms`);
           });
 
           $screen.classList.replace("now", "waiting");
