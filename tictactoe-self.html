@@ -28,36 +28,6 @@
       const $result = document.createElement("div");
       const rows = [];
 
-      const checkWinnerAndDraw = (target) => {
-        //승자가 있으면
-        if (hasWinner) {
-          $result.textContent = `${turn}님이 승리!`;
-          return;
-        }
-        //무승부면
-        const draw = rows.flat().every((td) => td.textContent);
-        if (draw) {
-          $result.textContent = "무승부";
-          return;
-        }
-        turn = turn === "X" ? "O" : "X";
-      };
-
-      const callback = (event) => {
-        if (event.target.textContent) return; // 칸에 글자가 있는가?
-        event.target.textContent = turn;
-        //승부판단
-        checkWinnerAndDraw(event.target);
-        //X를 컴퓨터로 지정하고 랜덤하게 찍도록 정의.
-        if (turn === "X") {
-          const emptyCells = rows.flat().filter((v) => !v.textContent);
-          const randomCell =
-            emptyCells[Math.floor(Math.random() * emptyCells.length)];
-          randomCell.textContent = "X";
-          checkWinnerAndDraw(event.target);
-        }
-      };
-
       //승패케이스 판단
       const checkWinner = (target) => {
         const rowIndex = target.parentNode.rowIndex;
@@ -96,6 +66,44 @@
           hasWinner = true;
         }
         return hasWinner;
+      };
+
+      const checkWinnerAndDraw = (target) => {
+        const hasWinner = checkWinner(target);
+        //승자가 있으면
+        if (hasWinner) {
+          $result.textContent = `${turn}님이 승리!`;
+          $table.removeEventListener("click", callback);
+          return;
+        }
+        //무승부면
+        const draw = rows.flat().every((td) => td.textContent);
+        if (draw) {
+          $result.textContent = "무승부";
+          return;
+        }
+        turn = turn === "X" ? "O" : "X";
+      };
+
+      let clickable = true;
+      const callback = (event) => {
+        if (!clickable) return;
+        if (event.target.textContent) return; // 칸에 글자가 있는가?
+        event.target.textContent = turn;
+        //승부판단
+        checkWinnerAndDraw(event.target);
+        //X를 컴퓨터로 지정하고 랜덤하게 찍도록 정의.
+        if (turn === "X") {
+          clickable = false;
+          setTimeout(() => {
+            const emptyCells = rows.flat().filter((v) => !v.textContent);
+            const randomCell =
+              emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            randomCell.textContent = "X";
+            checkWinnerAndDraw(event.target);
+            clickable = true;
+          }, 500);
+        }
       };
 
       for (let i = 1; i <= 3; i++) {

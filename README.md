@@ -18,12 +18,15 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 <p align="center"><img src = https://user-images.githubusercontent.com/74204327/116888857-e85d4380-ac66-11eb-92b0-1893ad4ddef8.png height = 350px width = 430px></p><br>
 
-- 컴퓨터가 한번 더 진행해서 컴퓨터의 턴인지 물어보고 승패여부 따지는 식으로 반복
+- 이전 틱택토에서 컴퓨터가 한번 더 진행해서 컴퓨터의 턴인지 물어보고 승패여부 따지는 식으로 반복
 
 ### **배운 개념**
 
-- filter(()=>) : 조건()에 맞는 데이터 필터링
+- `filter(()=>)` : 조건()에 맞는 데이터 필터링
+
   - 빈칸인 데이터를 찾아서 그 데이터 길이만큼 반복하여 랜덤함수로 랜덤값 추출할 수 있게 한다.
+
+- 핵심은 timeOut실행도중 클릭 못하도록 처리하는 것(clickable 플레그 사용)이랑 게임이 끝났는데 클릭이 되도록 막는 것이다.($table.removeEventLisener('click', callback))
 
 ---
 
