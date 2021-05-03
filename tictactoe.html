@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>틱택토</title>
+  </head>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      border: 1px solid black;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+    }
+  </style>
+  <body>
+    <script>
+      let turn = "O";
+
+      const { body } = document; // const body = document.body
+      //--> 구조분해 할당(destruturing)
+      const $table = document.createElement("table");
+      const $result = document.createElement("div");
+      const rows = [];
+      const callback = (event) => {
+        if (event.target.textContent) return; // 칸에 글자가 있는가?
+        event.target.textContent = turn;
+        //승자가 있으면
+        if (checkWinner(event.target)) {
+          $result.textContent = `${turn}님이 승리!`; //중간에 승리하면 td에 계속 turn이 찍힌다.
+          $table.removeEventListener("click", callback); //removeEventListener로 이벤트 제거.
+          return;
+        }
+        //무승부면
+        const draw = rows.flat().every((td) => td.textContent);
+        if (draw) {
+          $result.textContent = "무승부";
+          return;
+        }
+        //승자가 없으면
+        turn = turn === "O" ? "X" : "O";
+      };
+      //승패여부 판단
+      const checkWinner = (target) => {
+        const rowIndex = target.parentNode.rowIndex;
+        const cellIndex = target.cellIndex;
+        // 아래의 코드를 tartget.cellIndex, target.parentNode.rowIndex로 줄일 수 있다.
+        // rows.forEach((rpw, ri) => {
+        //   rows.forEach((cell, ci) => {
+        //     if (cell === target) {
+        //       rowIndex = ri;
+        //       cellIndex = ci;
+        //     }
+        //   });
+        // });
+        //세 칸이 다 채워졌는가?
+        let hasWinner = false;
+        //가로줄 검사
+        if (
+          rows[rowIndex][0].textContent === turn &&
+          rows[rowIndex][1].textContent === turn &&
+          rows[rowIndex][2].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        //세로줄 검사
+        if (
+          rows[0][cellIndex].textContent === turn &&
+          rows[1][cellIndex].textContent === turn &&
+          rows[2][cellIndex].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        //대각선 검사
+        if (
+          rows[0][0].textContent === turn &&
+          rows[1][1].textContent === turn &&
+          rows[2][2].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        if (
+          rows[0][2].textContent === turn &&
+          rows[1][1].textContent === turn &&
+          rows[2][0].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        return hasWinner;
+      };
+      for (let i = 1; i <= 3; i++) {
+        const $tr = document.createElement("tr");
+        const cells = [];
+        for (let j = 1; j <= 3; j++) {
+          const $td = document.createElement("td");
+          cells.push($td);
+          //   $td.addEventListener("click", (event) => {
+          //     if (event.target.textContent) return; // 칸에 글자가 있는가?
+          //     event.target.textContent = turn;
+          //     //승부 확인
+          //     if (turn === "O") {
+          //       turn = "X";
+          //     } else if (turn === "X") {
+          //       turn = "O";
+          //     }
+          //   });
+
+          //이벤트를 테이블에 올렸고 callback은 돌아가지만 실제 클릭은 td의 부모태그까지 따라가서 적용이 된다.(이벤트 버블링)
+          $tr.append($td);
+        }
+        rows.push(cells);
+        $table.append($tr);
+      }
+
+      //위의 코드를 callback으로 빼면 아래와 같다. 대신, 스코프에 문제가 없어야 한다.
+      $table.addEventListener("click", callback);
+      body.append($table);
+      body.append($result);
+    </script>
+  </body>
+</html>
