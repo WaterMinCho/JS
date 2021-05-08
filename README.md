@@ -8,7 +8,168 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 ---
 
-<br>
+## **텍스트RPG게임(feat.클래스)**
+
+### `2021.05.08 text-rpg / text-rpg-class`<br><br>
+
+### **플로우**
+
+- 두 가지 모드가 있다. 모험, 휴식, 종료 중에서 선택하는 일반모드와 모험을 떠나 적을 만나게 될 때 돌입하는 전투 모드다. 전투 모드에서는 적을 공격하거나 체력을 회복. 또는 도망간다.
+- 일반 모드일 때.<p align="center"><img src = https://user-images.githubusercontent.com/74204327/117518428-a91e5200-afda-11eb-894e-e7a75f4791ab.png height = 300px width = 430px></p><br>
+- 전투 모드일 때.<p align="center"><img src = https://user-images.githubusercontent.com/74204327/117518519-fc90a000-afda-11eb-960e-c11b267d3618.png height = 350px width = 380px></p><br>
+
+- 이전 틱택토에서 컴퓨터가 한번 더 진행해서 컴퓨터의 턴인지 물어보고 승패여부 따지는 식으로 반복
+
+### **배운 개념**
+
+- `JSON.parse() / JSON.stringify()`
+
+  ```javascript
+  const monster1 = JSON.parse(JSON.stringify(monsterList[0])); // 참조방식과 복사가 있다. 얕은 복사, 깊은 복사.
+  const monster2 = monsterList[0]; //객체 대입하면 참조.
+  monster1.name = "새 몬스터";
+  console.log(monsterList[0].name); //슬라임
+  monster2.name = "새 몬스터";
+
+  console.log(monsterList[0].name); //새 몬스터
+  console.log(monsterList[0] === monster1); // false 깊은 복사
+  console.log(monsterList[0] === monster2); // true 참조 관계
+  ```
+
+  실습코드에서 위 코드를 추가했을 떄, 기존 `monsterList`배열의 객체에서 정보를 일방적으로 가져다 써야하는 경우가 많을 것이다. <br>예를 들어 100중에 70정도를 서버의 데이터를 가져와서 쓰고 몇가지 일부만 서버에 데이터를 던져 업데이트해주는 것과 같다고 보면 된다.
+  실습코드가 클라이언트라고 가정하면 `monsterList`의 배열은 특정 상황 외에는 업데이트를 하면 안되기에 참조방식의 변수핸들링을 해선 안되고 별도의 공간에 복사하여 의도치 않은 상호참조를 방지하고자 <u>얕은 복사(shallow copy)와 깊은 복사(deep copy)</u> 개념이 있다. 위 예제코드는 <u>깊은 복사</u> 개념을 사용한 예제이며 참고로, `JSON.parse(JSON.stringify())`방식은 깊은 복사방법 중 하나일 뿐이다.
+  <br>
+  그럼 얕은 복사는 어떻게 쓰는지 보자.
+
+  ```javascript
+  const monster3 = { ...monster[0] }; //객체 리터럴 복사.
+  const arr = [...arr]; //배열 복사.
+  ```
+
+  중첩된 객체가 있을 때 가장 바깥 객체만 복사되고, 내부 객체는 참조 관계를 유지하는 복사다. 만약 객체 리터럴을 복사할 때 중괄호 내에 ...를 쓰면 되고 배열은 대괄호 내에 ...을 쓰면 된다.
+
+- **_얕은 복사와 깊은 복사의 차이._** <br>
+  얕은 복사는 외부만 복사 내부는 참조, 깊은 복사는 모두 참조관계가 끊기고 복사.
+
+  ```javascript
+  const a = [];
+  const b = "hello";
+  const c = {};
+  const arr = [a, b, c];
+
+  const arr1 = arr; // 참조관계
+  arr1[1] = "hi"; //hi
+  arr[1]; //hi
+
+  const arr2 = [...arr]; //얕은 복사
+  arr2[1] = "메롱"; //메롱
+  arr[1]; //hi
+
+  arr2[0].push(1); //1
+  arr[0]; //1
+  //얕은 복사는 배열([])은 복사하되(객체가 아닌 값들은 참조가 없기 때문에 복사가 된다.), a,b,c는 참조(객체기 때문)다. 대부분은 얕은 객체로 해결이 된다.
+
+  //객체 내에 객체가 있는 경우는 깊은 복사를 해야하는 상황이 생길 수 있다.
+  const arr3 = JSON.parse(JSON.stringify(arr));
+  arr3[0].push(2);
+  arr[0]; //1
+  arr3[0]; //2
+  ```
+
+  덧붙여서 `JSON.parse(JSON.stringify(객체))`는 성능도 느리고 함수나 `Math`, `Date`같은 객체를 복사할 수 없다는 단점이 있다. 실무에서는 `lodash`같은 라이브러리를 사용하곤 한다. 추가로 저번에 공부한 `slice()`가 있으며 `concat()`도 있다.
+
+- **`메서드`**
+
+  - this<br>
+    `this`는 자바스크립트에선 다른 언어와 다르다. 객체에서 `this`를 쓰면 해당 객체를 가리키는 기능을 하지만 이 상황은 `function()`형태에서만 적용이 된다. 하지만 `()=>`화살표함수를 쓰면 `this`는 `window`를 가리키게 된다. 엄밀히 말하면 `객체.메서드` 형태를 써야지만 `this`가 객체를 가리킬 수 있다.
+
+- **`클래스`**
+- 2015년 전엔 factory함수(패턴) 또는 생성자(new) 호출 방식으로 클래스를 구현했었다. new를 붙이지 않으면 this가 window를 가리키게 된다.
+- 프로토타입을 써서 메서드를 제공했지만 따로 적용했었다.
+
+  - 프로토타입이란?<br>
+    `prototype`은 생성자 함수에 메서드를 추가할 때 `prototype`이라는 속성 안에 추가해야 한다. 그 속성 안에 추가한 메서드를 <u>프로토타입메서드</u>u>라고 한다. 이렇게 하면 팩토리패턴과 달리 메서드를 재사용할 수 있는 장점이 있지만 생성자 함수와 프로토타입 메서드가 하나로 묶여있지 않았다.
+
+- 2015년 이후엔 class를 제공하기 시작했다. 여기서도 new 잊지말자 ~~컴파일러가 잡아주긴 한다~~
+
+  ```javascript
+  class Hero {
+    constructor(game, name) {
+      this.game = game;
+      this.name = name;
+      this.lev = 1;
+      this.maxHp = 100;
+      this.hp = 100;
+      this.xp = 0;
+      this.att = 10;
+    }
+    attack(target) {
+      target.hp -= this.att;
+    }
+    heal(monster) {
+      this.hp += 20;
+      this.hp -= monster.att;
+    }
+  }
+  ```
+
+  - 위의 예제가 최신 문법(?)인데, 생성자와 메소드를 한데로 묶을 수 있어서 훨씬 Clean함이 느껴지고 실제로도 생성자를 호출할 때 매우 유용하다. 대신 설계가 중요하다. 이 뒤 부터는 `text-rpg-class.html` 실습파일에서 진행한다.
+
+- **this**<br>
+  `this`는 위치에 따라 가리키는 것이 수시로 바뀔 수 있다. 예를 들어 약속 중 하나인 `addEventListener`를 `function`형태로 쓴다면 함수 내부의 `this`는 `addEventListener`가 가리키는 메모리 공간(document)을 가리키게 되어 클래스 내의 `this`랑 다르게 가리키는 경우가 있다. 이러한 현상을 해결하기 위해 우리는 `arrowFunction`을 배웠다. `arrowFunction`을 적용하면 바깥의 `this`를 그대로 가져올 수 있는 이점이 있다. 그래서 `function()`과 `arrowFunction` 둘 다 상황에 맞게 사용하면 된다.<br>이게 익숙하지 않으면 `console.log(this)`를 해서 무엇을 가리키는지 수시로 확인하는 버릇을 가지자.<br>
+  참고로 `this`는 함수가 호출될 때 결정이 되기 때문에 아래 실습 코드와 같이 세팅하면 문제가 없다.
+
+  ```javascript
+  start() {
+          $gameMenu.addEventListener("submit", this.onGameMenuInput);
+          $battleMenu.addEventListener("submit", this.onBattleMenuInput);
+          this.changeScreen("game");
+        }
+        onGameMenuInput = (event) => {
+          event.preventDefault();
+          const input = event.target["menu-input"].value;
+            this.changeScreen("battle");
+          } else if (input === "2") {
+          } else if (input === "3") {
+          }
+        };
+        onBattleMenuInput = (event) => {
+          event.preventDefault();
+          const input = event.target["battle-input"].value;
+          if (input === "1") {
+          } else if (input === "2") {
+          } else if (input === "3") {
+          }
+        };
+  ```
+
+  ```javascript
+  document.addEventListener("click", () => {
+    console.log(this); //window
+  });
+  ```
+
+  함수 선언문일 때만 `document`가 나오는 이유는, `click`이벤트가 발생할 때 `addEventListener` 메서드가 콜백함수의 `this`를 `event.target`으로 바꿔서 호출하기 때문이다.
+  <br>그러므로 함수 선언문의 `this`는 `bind`메서드를 사용해서 직접 바꿀 수 있다. 아래를 보자.
+
+  ```javascript
+  function a() {
+    console.log(this);
+  }
+  a.bind(document)(); //document
+  ```
+
+  화살표 함수는 `bind`를 할 수 없어서 `this`가 바뀌지 않아 `window`가 그대로 나온다. 아래를 보자.
+
+  ```javascript
+  const b = () => {
+    console.log(this);
+  };
+  b.bind(document)(); //window
+  ```
+
+  <br>
+  <br>
 
 ## **틱택토 컴퓨터전**
 
