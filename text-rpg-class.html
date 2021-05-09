@@ -61,13 +61,15 @@
           this.monster = null;
           this.hero = null;
           this.monsterList = [
-            { name: "슬라임", hp: 25, att: 10, xp: 10 },
-            { name: "스켈레톤", hp: 50, att: 15, xp: 20 },
-            { name: "마왕", hp: 150, att: 35, xp: 50 },
+            { name: "발탄", hp: 25, att: 10, xp: 10 },
+            { name: "비아키스", hp: 50, att: 15, xp: 20 },
+            { name: "쿠크세이튼", hp: 60, att: 17, xp: 25 },
+            { name: "카마인", hp: 150, att: 35, xp: 50 },
           ];
           this.start(name);
         }
         start(name) {
+          this.showMessage("");
           $gameMenu.addEventListener("submit", this.onGameMenuInput); //addEventListener의 this는 $gameMenu를 가리킨다.
           $battleMenu.addEventListener("submit", this.onBattleMenuInput); //addEventListener의 this는 $battleMenu를 가리킨다.
           this.changeScreen("game");
@@ -114,8 +116,12 @@
             );
           } else if (input === "2") {
             //휴식
+            this.hero.hp = this.hero.maxHp;
+            this.updateHeroStat();
+            this.showMessage("충분한 휴식을 취했다.");
           } else if (input === "3") {
             //종료
+            this.showMessage("");
             this.quit();
           }
         };
@@ -150,9 +156,17 @@
             this.updateMonsterStat();
           } else if (input === "2") {
             //회복
+            const { hero, monster } = this;
+            hero.hp = Math.min(hero.maxHp, hero.hp + 20); //Math.min(a,b) =a와 b 중에 낮은 값.
+            monster.attack(hero);
+            this.showMessage("체력을 조금 회복했다!");
+            this.updateHeroStat();
           } else if (input === "3") {
-            this.changeScreen("game");
             //도망
+            this.changeScreen("game");
+            this.showMessage("안전한 곳으로 도망쳤다!");
+            this.monster = null;
+            this.updateMonsterStat();
           }
         };
         updateHeroStat() {
@@ -193,19 +207,26 @@
           this.changeScreen("start");
           game = null;
         }
-      } // 속한 게임의 몬스터와 영웅을 구분해줘야 한다.
-      class Hero {
-        constructor(game, name) {
+      }
+      // 몬스터와 영웅의 공통속성을 지닌 부모클래스 Unit정의.
+      class Unit {
+        constructor(game, name, hp, att, xp) {
           this.game = game;
           this.name = name;
-          this.lev = 1;
-          this.maxHp = 100;
-          this.hp = 100;
-          this.xp = 0;
-          this.att = 10;
+          this.maxHp = hp;
+          this.hp = hp;
+          this.xp = xp;
+          this.att = att;
         }
         attack(target) {
           target.hp -= this.att;
+        }
+      }
+      // 속한 게임의 몬스터와 영웅을 구분해줘야 한다.
+      class Hero extends Unit {
+        constructor(game, name) {
+          super(game, name, 115, 10, 0); //부모 클래스의 생성자 호출.
+          this.lev = 1; //공통이 아닌 속성.
         }
         heal(monster) {
           this.hp += 20;
@@ -220,21 +241,13 @@
             this.maxHp += 5;
             this.att += 5;
             this.hp = this.maxHp;
-            this.game.showMessage(`레벨업! ${this.lev}.LV`);
+            this.game.showMessage(`레벨업! ${this.lev}.Lv`);
           }
         }
       }
-      class Monster {
+      class Monster extends Unit {
         constructor(game, name, hp, att, xp) {
-          this.game = game;
-          this.name = name;
-          this.maxHp = hp;
-          this.hp = hp;
-          this.xp = xp;
-          this.att = att;
-        }
-        attack(target) {
-          target.hp -= this.att;
+          super(game, name, hp, att, xp); //부모 클래스의 생성자 호출.
         }
       }
 

@@ -168,6 +168,160 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
   b.bind(document)(); //window
   ```
 
+- 클래스 상속
+
+  - 만약 영웅과 몬스터가 아닌 보스몬스터 또는 에픽등급의 몬스터를 생성하고 싶으면 `class BossMonster` 또는 `class EpicMonster` 이런 식으로 새로운 클래스를 생성해야 할 것이다. 하지만 `Hero, Monster, BossMonster, EpicMonster`의 클래스는 **_공통의 속성_**을 지닌 것을 볼 수 있다.
+
+  ```javascript
+  class Hero {
+    constructor(game, name) {
+      this.game = game; //공통
+      this.name = name; //공통
+      this.lev = 1;
+      this.maxHp = 100; //공통
+      this.hp = 100; //공통
+      this.xp = 0; //공통
+      this.att = 10; //공통
+    }
+    attack(target) {
+      //공통
+      target.hp -= this.att;
+    }
+    heal(monster) {
+      this.hp += 20;
+      this.hp -= monster.att;
+    }
+    getXp(xp) {
+      this.xp += xp;
+      if (this.xp >= this.lev * 15) {
+        //경험치를 다 채우면
+        this.xp -= this.lev * 15;
+        this.lev += 1;
+        this.maxHp += 5;
+        this.att += 5;
+        this.hp = this.maxHp;
+        this.game.showMessage(`레벨업! ${this.lev}.LV`);
+      }
+    }
+  }
+  class Monster {
+    constructor(game, name, hp, att, xp) {
+      this.game = game; //공통
+      this.name = name; //공통
+      this.maxHp = hp; //공통
+      this.hp = hp; //공통
+      this.xp = xp; //공통
+      this.att = att; //공통
+    }
+    attack(target) {
+      //공통
+      target.hp -= this.att;
+    }
+  }
+  ```
+
+  공통의 속성을 따로 빼서 `Unit`이라는 클래스를 만들어보자.
+
+  ```javascript
+  class Unit {
+    constructor(game, name, hp, att, xp) {
+      this.game = game;
+      this.name = name;
+      this.maxHp = hp;
+      this.hp = hp;
+      this.xp = xp;
+      this.att = att;
+    }
+    attack(target) {
+      target.hp -= this.att;
+    }
+  }
+  ```
+
+  그리고 이 공통클래스는 `extends`를 사용하여 자식클래스인 `Monster`과 `Hero`에 상속할 수 있다. 결국 `Unit`은 `Hero`의 부모클래스인 셈이다. 방법은 이렇다.
+
+  ```javascript
+  class Hero extends Unit {
+    constructor(game, name) {
+      //super(game,name,100,10,0) 추가.
+      this.game = game; //공통(제거)
+      this.name = name; //공통(제거)
+      this.lev = 1;
+      this.maxHp = 100; //공통(제거)
+      this.hp = 100; //공통(제거)
+      this.xp = 0; //공통(제거)
+      this.att = 10; //공통(제거)
+    }
+    attack(target) {
+      //공통(제거)
+      target.hp -= this.att;
+    }
+    heal(monster) {
+      this.hp += 20;
+      this.hp -= monster.att;
+    }
+    getXp(xp) {
+      this.xp += xp;
+      if (this.xp >= this.lev * 15) {
+        this.xp -= this.lev * 15;
+        this.lev += 1;
+        this.maxHp += 5;
+        this.att += 5;
+        this.hp = this.maxHp;
+        this.game.showMessage(`레벨업! ${this.lev}.LV`);
+      }
+    }
+  }
+  class Monster extends Unit {
+    constructor(game, name, hp, att, xp) {
+      //super(game,name,100,10,0) 추가.
+      this.game = game; //공통(제거)
+      this.name = name; //공통(제거)
+      this.maxHp = hp; //공통(제거)
+      this.hp = hp; //공통(제거)
+      this.xp = xp; //공통(제거)
+      this.att = att; //공통(제거)
+    }
+    attack(target) {
+      //공통(제거)
+      target.hp -= this.att;
+    }
+  }
+  ```
+
+  이렇게 상속받은 속성 중 공통속성을 모두 제거한 후에 `super()`를 사용하여 부모클래스인 `Unit`의 생성자를 호출한다. 정리하면 아래와 같다.
+
+  ```javascript
+  class Hero extends Unit {
+    constructor(game, name) {
+      super(game, name, 100, 10, 0);
+      this.lev = 1;
+    }
+    heal(monster) {
+      this.hp += 20;
+      this.hp -= monster.att;
+    }
+    getXp(xp) {
+      this.xp += xp;
+      if (this.xp >= this.lev * 15) {
+        this.xp -= this.lev * 15;
+        this.lev += 1;
+        this.maxHp += 5;
+        this.att += 5;
+        this.hp = this.maxHp;
+        this.game.showMessage(`레벨업! ${this.lev}.LV`);
+      }
+    }
+  }
+  class Monster extends Unit {
+    constructor(game, name, hp, att, xp) {
+      super(game, name, hp, att, xp);
+    }
+  }
+  ```
+
+  추가설명하자면 자바스크립트는 다중 상속을 지원하지 않는 언어다.(하나의 클래스는 하나만 상속이 가능하다.) 역으로 정상작동하는 코드를 `분석`할 때, 해당 클래스에 없는데도 호출을 했다면 `부모클래스로 거슬러 올라가면서 메소드 또는 생성자를 찾아보면` 구조파악하는데 어렵지 않을 것이다.
+
   <br>
   <br>
 
