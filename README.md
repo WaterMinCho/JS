@@ -2,15 +2,73 @@
 # **`JavaScript`**
 
 Study for javascript by WaterMincho.<br>
-민초의 자바공부.<br><br>
+민초의 자바스크립트 공부.<br><br>
 
 README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록이기 때문에 일단 최신 순으로 정리하였다.
 
 ---
 
+## **지뢰찾기(자바스크립트 프로젝트 1회차)**
+
+### `2021.05.14` [mine-sweeper.html](https://github.com/WaterMinCho/JS/blob/main/mine-sweeper.html)
+
+<br><br>
+
+### **플로우**
+
+- 기본적으로 좌클릭을 했을 때랑 우클릭을 했을 때를 나눠서 처리해야 한다.
+- <br>
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118238110-0d597e00-b4d3-11eb-9d41-fe93fd5d943d.png height = 450px width = 550x></p><p align="center"><img src = https://user-images.githubusercontent.com/74204327/118239686-11869b00-b4d5-11eb-96ef-66e8e38a1473.png height = 250px width = 550x></p><br>
+
+### **배운 개념**
+
+- 상태에 따른 코드를 정의하면 더 편하다.<br>
+  코드숫자는 0~8까지 열린 칸<br>
+  지뢰가 없을 때 `닫힌 칸(NORMAL)`은 -1, `물음표칸(QUESTION)`은 -2, `깃발 칸(FLAG)`은 -3.<br>
+  지뢰가 있을 때 `닫힌 칸은(MINE)` -4, `물음표칸(QUESTION_MINE)`은 -5, `깃발 칸(FLAG_MINE)`은 -6
+  <br>
+
+- 순서
+
+  1. 배열`candidate`에 빈 공간을 만들고 그 공간에 0부터 99까지 채워넣는다.
+  2. `chosen`배열에 `mine`갯수인 10개를 뺀 공간에 랜덤으로 채워넣는다.
+  3. 이차원 배열로 `rowData`배열에 `CODE.NORMAL(-1)`을 채워넣는다.
+  4. 랜덤하게 생성된 지뢰 칸 위치(shuffle[k])에 MINE(-6)을 data[][]에채워넣는다.
+  5. `onRightClick`함수 생성 후 `preventDefault`로 기본동작 제거. `target`으로 html코드 불러올 수 있음.
+  6. `$tbody.addEventListener("contextmenu", onRightClick);`에서 `contextmenu`는 우클릭이벤트인데 해당 이벤트 콜백을 `onRightClick`으로 적용.
+  7. `onLeftClick()`을 선언 후 닫힌 칸인지 지뢰칸(`지뢰칸이면 removeEventListener.`)인지 여부 판단 함.
+  8. `countMine()`도 정의해서 주변 지뢰갯수를 카운트한다.
+  9. 지뢰게임은 지뢰를 제외한 나머지 칸을 모두 열면 승리하는 게임이고 주변 지뢰개수가 0개인 칸을 클릭하면 자동으로 주변 칸을 모두 열어주는 기능도 넣어야 한다.
+  10. `openAround(), isNormal(), open()`을 정의해서 `open이 0`이면 `openAround`가 주변을 열어준다.
+
+- Optional Chaining
+  mines.includes(data[rowIndex - 1]?.[cellIndex - 1]) && i++; <br>
+  => data[][]가 존재하면 i++실행.<br>
+  자바스크립트에선 배열에 음수번째 인덱스를 넣으면 undefined가 난다.(undefined[-1])
+  그래서
+
+  ```javascript
+  if (data[-1]) {
+    data[-1][-1];
+  }
+  ```
+
+  이런 식으로 커버할 수 있으며, 또는 접근자 . 앞에 ?를 붙이면 조건접근이 가능하다.<br>
+  추가로 `??, ||, &&`를 추가로 설명하면 기존에 and, or처럼 판단을 했지만 엄밀히 논리적으로 따지면 아래와 같다.
+
+  - target.textContent = A || B; <br>`A가 존재하지 않으면(false면) B.` `존재하면(true면) A.`
+  - target.textContent = A ?? B; <br>`A가 Null 또는 Undefined면 B.` `그 외엔 A.`
+  - mines.includes(A&&B);<br>`A가 존재하면(true면) B.` `존재하지 않으면(false면) A.`
+
+- Maximum call stack size exceeded 오류
+
+---
+
 ## **카드 짝맞추기(feat.이벤트루프)**
 
-### `2021.05.12 concentration.html`<br><br>
+### `2021.05.12` [concentration.html](https://github.com/WaterMinCho/JS/blob/main/concentration.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -164,9 +222,12 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 ---
 
 <br>
+
 ## **텍스트RPG게임(feat.클래스)**
 
-### `2021.05.08 text-rpg.html / text-rpg-class.html`<br><br>
+### `2021.05.08` [text-rpg.html](https://github.com/WaterMinCho/JS/blob/main/text-rpg.html) / [text-rpg-class.html](https://github.com/WaterMinCho/JS/blob/main/text-rpg-class.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -488,7 +549,9 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 ## **틱택토 컴퓨터전**
 
-### `2021.05.03 tictactoe-self.html`<br><br>
+### `2021.05.03` [tictactoe-self.html](https://github.com/WaterMinCho/JS/blob/main/tictactoe-self.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -510,7 +573,9 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 ## **틱택토**
 
-### `2021.05.03 tictactoe.html`<br><br>
+### `2021.05.03` [tictactoe.html](https://github.com/WaterMinCho/JS/blob/main/tictactoe.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -717,7 +782,9 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 ## **반응속도 테스트**
 
-### ` 2021.05.02 response-check.html`<br><br>
+### ` 2021.05.02` [response-check.html](https://github.com/WaterMinCho/JS/blob/main/response-check.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -950,11 +1017,13 @@ array = [1, 3, 5];
 ---
 
 <br>
-    <br>
+<br>
 
 ## **가위바위보**
 
-### `2021.04.30 rsp.html`<br><br>
+### `2021.04.30` [rsp.html](https://github.com/WaterMinCho/JS/blob/main/rsp.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -1094,7 +1163,9 @@ array = [1, 3, 5];
 
 ## **로또 추첨기(feat.비동기)**
 
-### `lotto.html / lotto-self.html 2021.04.30`<br><br>
+### `2021.04.30` [lotto.html](https://github.com/WaterMinCho/JS/blob/main/lotto.html) / [lotto-self.html](https://github.com/WaterMinCho/JS/blob/main/lotto-self.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -1440,7 +1511,9 @@ array = [1, 3, 5];
 
 ## **숫자야구**
 
-### `2021.04.29 number-baseball.html`<br><br>
+### `2021.04.29` [number-baseball.html](https://github.com/WaterMinCho/JS/blob/main/number-baseball.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -1531,7 +1604,9 @@ array = [1, 3, 5];
 
 ## **계산기**
 
-### `2021.04.28 calculator.html`<br><br>
+### `2021.04.28` [calculator.html](https://github.com/WaterMinCho/JS/blob/main/calculator.html)
+
+<br><br>
 
 ### **플로우**
 
@@ -1704,7 +1779,9 @@ array = [1, 3, 5];
 
 ## **끝말잇기**
 
-### `2021.04.23 word-relay.html / kungkungdda.html` <br><br>
+### `2021.04.23` [word-relay.html](https://github.com/WaterMinCho/JS/blob/main/word-relay.html) / [kungkungdda.html](https://github.com/WaterMinCho/JS/blob/main/kungkungdda.html)
+
+<br><br>
 
 ### **배운 개념**
 
@@ -1719,10 +1796,12 @@ array = [1, 3, 5];
 
 ## **자바스크립트 기초**
 
-### `2021.04.23 1stJsStudy.html` <br><br>
+### `2021.04.23` [1stJsStudy.html](https://github.com/WaterMinCho/JS/blob/main/1stJsStudy.html)
+
+<br><br>
 
 ### **배운 개념**
 
-- 선택자$는 태그를 변수에 넣을 때 사용한다., hide, show.
-
----
+- 선택자$는 태그를 변수에 넣을 때 인식하기 쉽게 표기하는게 좋다.
+- 객체는 선언하는 시점에 굳이 키를 잡지 않아도 나중에 추가로 잡을 수 있다.
+- ***
