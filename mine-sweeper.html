@@ -272,7 +272,7 @@
             //첫 클릭이 지뢰면
             transferMine(rowIndex, cellIndex); //지뢰 옮기기
             data[rowIndex][cellIndex] = CODE.NORMAL; //현재 칸을 빈칸으로.
-            cellData = CODE.NORMAL;
+            cellData = CODE.NORMAL; //참조관계기 때문에 data[][]를 바꾼다고 해서 cellData가 바뀌지는 않기 때문에 또 바꿔야 함.
           }
         }
         if (cellData === CODE.NORMAL) {
