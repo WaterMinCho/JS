@@ -79,6 +79,7 @@
         }, 1000);
       }
       $form.addEventListener("submit", onSubmit);
+
       function plantMine() {
         const candidate = Array(row * cell) //row*cell만큼의 배열 공간을 만든다.
           .fill() //채워넣는다.
@@ -151,6 +152,7 @@
           target.textContent = "";
         }
       }
+
       function countMine(rowIndex, cellIndex) {
         const mines = [CODE.MINE, CODE.QUESTION_MINE, CODE.FLAG_MINE];
         let i = 0;
@@ -164,6 +166,7 @@
         mines.includes(data[rowIndex + 1]?.[cellIndex + 1]) && i++;
         return i;
       }
+
       function open(rowIndex, cellIndex) {
         if (data[rowIndex]?.[cellIndex] >= CODE.OPENED) return; //이미 열려있으면 더 열려하지 말고 함수 종료해라.
         const target = $tbody.children[rowIndex].children[cellIndex];
@@ -183,9 +186,11 @@
         }
         return count;
       }
+
       function isNormal(cell) {
         return cell === CODE.NORMAL;
       }
+
       function openAround(rowIndex, cellIndex) {
         setTimeout(() => {
           const count = open(rowIndex, cellIndex);
@@ -210,23 +215,81 @@
           }
         }, 0);
       }
+
+      //첫 번째 클릭 때 지뢰가 아니게끔 지뢰 옮기는 함수.
+      let normalCellFound = false;
+      let searched;
+      let firstClick = true;
+      function transferMine(rowIndex, cellIndex) {
+        if (normalCellFound) return; //이미 빈칸이면 종료
+        if (
+          rowIndex < 0 ||
+          rowIndex >= row ||
+          cellIndex < 0 ||
+          cellIndex >= cell
+        )
+          return;
+        if (searched[rowIndex][cellIndex]) return; //이미 찾은 칸이면 종료
+        if (data[rowIndex][cellIndex] === CODE.NORMAL) {
+          //빈칸인 경우
+          normalCellFound = true;
+          data[rowIndex][cellIndex] = CODE.MINE;
+        } else {
+          //지뢰 칸인 경우 8방향 탐색
+          searched[rowIndex][cellIndex] = true;
+          transferMine(rowIndex - 1, cellIndex - 1);
+          transferMine(rowIndex - 1, cellIndex);
+          transferMine(rowIndex - 1, cellIndex + 1);
+          transferMine(rowIndex, cellIndex - 1);
+          transferMine(rowIndex, cellIndex + 1);
+          transferMine(rowIndex + 1, cellIndex - 1);
+          transferMine(rowIndex + 1, cellIndex);
+          transferMine(rowIndex + 1, cellIndex + 1);
+        }
+      }
+
+      function showMines() {
+        const mines = [CODE.MINE, CODE.QUESTION_MINE, CODE.FLAG_MINE];
+        data.forEach((row, rowIndex) => {
+          row.forEach((cell, cellIndex) => {
+            if (mines.includes(cell)) {
+              $tbody.children[rowIndex].children[cellIndex].textContent = "X";
+            }
+          });
+        });
+      }
       function onLeftClick(event) {
         const target = event.target; //td태그
         const rowIndex = target.parentNode.rowIndex; //몇 번째 줄(tr.rowIndex)
         const cellIndex = target.cellIndex; //몇 번째 칸(td.cellIndex)
-        const cellData = data[rowIndex][cellIndex];
+        let cellData = data[rowIndex][cellIndex];
+        if (firstClick) {
+          firstClick = false;
+          searched = Array(row)
+            .fill()
+            .map(() => []);
+          if (cellData === CODE.MINE) {
+            //첫 클릭이 지뢰면
+            transferMine(rowIndex, cellIndex); //지뢰 옮기기
+            data[rowIndex][cellIndex] = CODE.NORMAL; //현재 칸을 빈칸으로.
+            cellData = CODE.NORMAL;
+          }
+        }
         if (cellData === CODE.NORMAL) {
           // 닫힌 칸이면
           openAround(rowIndex, cellIndex);
         } else if (cellData === CODE.MINE) {
           //지뢰 칸이면
+          showMines();
           target.textContent = "펑";
           target.className = "opened";
           clearInterval(interval);
+          firstClick = true;
           $tbody.removeEventListener("contextmenu", onRightClick);
           $tbody.removeEventListener("click", onLeftClick);
         } //물음표나 깃발이면 무시.
       }
+
       function drawTable() {
         data = plantMine();
         data.forEach((row) => {
