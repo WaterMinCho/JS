@@ -40,11 +40,15 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
   8. `countMine()`도 정의해서 주변 지뢰갯수를 카운트한다.
   9. 지뢰게임은 지뢰를 제외한 나머지 칸을 모두 열면 승리하는 게임이고 주변 지뢰개수가 0개인 칸을 클릭하면 자동으로 주변 칸을 모두 열어주는 기능도 넣어야 한다.
   10. `openAround(), isNormal(), open()`을 정의해서 `open이 0`이면 `openAround`가 주변을 열어준다.
+  11. 승리하는 케이스일때 추가. 100칸 중에 10칸을 제외한 90칸을 모두 열면 승리하는 조건 추가하면 된다.
+  12. 줄, 칸, 지뢰 개수 조절하기-->row,cell,mine변수에 input으로 submit할 수 있도록 세팅. submit하면 openCount초기화, tbody지우고 drawTable()실행, timer시작. --> 해당하는 변수들을 let으로 수정.
 
-- Optional Chaining
+- ## Optional Chaining
+
   mines.includes(data[rowIndex - 1]?.[cellIndex - 1]) && i++; <br>
   => data[][]가 존재하면 i++실행.<br>
-  자바스크립트에선 배열에 음수번째 인덱스를 넣으면 undefined가 난다.(undefined[-1])
+  ?.은 앞 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환한다. .?는 존재하지 않아도 괜찮은 대상에만 사용해야 한다.<br>
+  자바스크립트에선 배열에 음수번째 인덱스를 넣으면 undefined가 난다.(undefined[-1])<br>
   그래서
 
   ```javascript
@@ -54,13 +58,18 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
   ```
 
   이런 식으로 커버할 수 있으며, 또는 접근자 . 앞에 ?를 붙이면 조건접근이 가능하다.<br>
-  추가로 `??, ||, &&`를 추가로 설명하면 기존에 and, or처럼 판단을 했지만 엄밀히 논리적으로 따지면 아래와 같다.
+- ## nullish coalescing operator(null 병합 연산자)
+  `??, ||, &&`를 추가로 설명하면 기존에 and, or처럼 판단을 해왔지만 엄밀히 논리적으로 따지면 아래와 같다.
 
   - target.textContent = A || B; <br>`A가 존재하지 않으면(false면) B.` `존재하면(true면) A.`
   - target.textContent = A ?? B; <br>`A가 Null 또는 Undefined면 B.` `그 외엔 A.`
   - mines.includes(A&&B);<br>`A가 존재하면(true면) B.` `존재하지 않으면(false면) A.`
 
-- Maximum call stack size exceeded 오류
+- ### Maximum call stack size exceeded 오류
+  - 재귀할 때 자주 나오는 오류 중 하나.
+  - 최대 호출 스택 사이즈를 초과했다는 의미. 호출 스택의 관점에서 알아보자.
+    - `OnLeftClick()`위에 `openAround()`가 여러 개가 얹어지면서 호출만하고 끝이 나지 않는 상황이 발생하여 `호출 스택`의 사이즈를 넘어가는 상황이 벌어진다.
+    - 그럴 땐 비동기 코드로 감싸주고 `백그라운드`와 `태스크 큐`에 할당하면 된다.(`setTimeout()`)
 
 ---
 
