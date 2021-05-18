@@ -5,9 +5,47 @@ Study for javascript by WaterMincho.<br>
 민초의 자바스크립트 공부.<br><br>
 
 README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록이기 때문에 일단 최신 순으로 정리하였다.
+<br>
 
 ---
 
+<br>
+
+## **2048게임 (자바스크립트 프로젝트 2회차)**
+
+### `2021.05.18` [2048.html](https://github.com/WaterMinCho/JS/blob/main/2048.html)
+
+<br><br>
+
+### **플로우**
+
+- <br>
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118597672-f2934c00-b7e7-11eb-8db1-3b9a8595c87e.png height = 460px width = 580x></p><br>
+
+### **배운 개념**
+
+- DocumentFragment
+
+  - 노드를 새로 생성하여 사용한다면 `Real DOM`트리 외부에 경량화된 DOM을 만들 수 있다. 마치 `Real DOM`트리처럼 작동하되, 메모리 상에서만 존재하는 빈 문서 템플릿이라고 생각하면 된다.
+  - 최적화 방법 중 하나라는데, 실습예제와 같이 `Table->tr->td` 순으로 가져온다 가정하면 tr이 만약 수없이 많다면 DOM의 객체 접근이 수없이 이루어지는데, `Table->Fragment->tr->td` 순으로 이루어 지면 가짜 DOM 상에 수많은 tr들이 메모리에 쌓여있는 채로 대기중일 것이다. 그리고 `Fragment`를 호출하면 `Real DOM`은 `가짜 DOM`에 한번 접근하여 Table에 tr들을 한번에 가져올 수 있게 되는 것이다. 이러한 형식의 세트를 많이 갖고 있는 프로그램이라면 더더욱 필요한 최적화 형식이 아닌가 싶다.
+  - 참고로 최신 브라우저의 경우에는 `리플로우(reflow)`가 발생하지 않도록 엔진을 최적화하기 때문에 `DocumentFragment` 객체를 사용할 때 발생하는 성능 향상을 체감할 수 없는 경우도 있다. 그러나 막대한 크기의 DOM 객체에 대한 다수의 접근을 필요로하는 작업을 수행해야하는 상황에서 `DocumentFragment` 객체를 이용한다면, 만족할만한 성능 향상을 기대할 수 있을 것이다.
+
+- 마우스 이벤트
+  - 마우스 이벤트의 속성을 보면 x,y좌표를 얻을 수 있는데, 좌표에는 여러 종류가 있다. x좌표로는 `clientX,offsetX,pageX,screenX,movementX`가 있고, y도 동일하다.
+    - `clientX, clientY`는 브라우저 페이지 내의 x,y좌표를 가리킨다(픽셀).
+    - `pageX와 pageY`도 브라우저 페이지 내의 x,y좌표를 가리키지만 `스크롤`이 있으면 스크롤한 픽셀값까지 포함한다.
+    - `offsetX, offsetY`는 이벤트를 연결한 대상을 기준으로 마우스의 x,y좌표를 가져온다. 실습에선 window에 이벤트를 걸어서` clientX, clientY`와 동일하지만, 페이지 내의 다른 태그에 마우스 이벤트를 걸면 해당 태그의 왼쪽 모서리 좌표가 0이 된다.
+    - `screenX, screenY`는 모니터를 기준으로 하여 모니터의 왼쪽 모서리가 0이 된다.
+    - `movementX, movementY`는 `mousemove`이벤트와 비교하여 얼마나 마우스를 움직였는지 표시한다. 따라서 mousemove이벤트인 경우에만 값이 잡힌다.
+    - 마우스 방향을 판단할 때는 mousedown과 mouseup이벤트만 필요하다.
+    <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118618148-4c067580-b7fe-11eb-880b-50947337e791.png height = 400px width = 400x></p><br>
+  - 실습코드 설명.
+    `javascript let startCoord; window.addEventListener("mousedown", (event) => { startCoord = [event.clientX, event.clientY]; }); window.addEventListener("mouseup", (event) => { const endCoord = [event.clientX, event.clientY]; const diffX = endCoord[0] - startCoord[0]; const diffY = endCoord[1] - startCoord[1]; if (diffX < 0 && Math.abs(diffX) > Math.abs(diffY)) { moveCells("left"); } else if (diffX > 0 && Math.abs(diffX) > Math.abs(diffY)) { moveCells("right"); } else if (diffX > 0 && Math.abs(diffX) <= Math.abs(diffY)) { moveCells("down"); } else if (diffX < 0 && Math.abs(diffX) <= Math.abs(diffY)) { moveCells("up"); } }); ` - Math.abs는 절댓값 도출메서드다. - 마우스 클릭 때 startCoord변수로 기준좌표를 지정했다.(mousedown이벤트 당시의 clientX와 clientY값.) - 마우스 클릭을 뗐을 때 endCoord변수로 마지막 좌표를 지정했다.(mouseup이벤트 당시의 clientX와 clientY값.) - diffX와 diffY는 1차함수의 기울기공식의 일부다. diffX(X좌표 증가량-X좌표기준), diffY(Y좌표 증가량-Y좌표기준.) - diffX가 0보다 작고 diffY보다 절댓값이 크면 기준좌표값인 startCoord보다 왼쪽에 있다고 판단한다. - diffX가 0보다 크고 diffY보다 절댓값이 크면 기준좌표값인 startCoord보다 오른쪽에 있다고 판단한다. - diffX가 0보다 크고 diffY보다 절댓값이 작거나 같으면 기준좌표값인 startCoord보다 아래에 있다고 판단한다. - diffX가 0보다 작고 diffY보다 절댓값이 크면 기준좌표값인 startCoord보다 위에 있다고 판단한다.
+    <br>
+
+---
+
+<br>
 ## **지뢰찾기(자바스크립트 프로젝트 1회차)**
 
 ### `2021.05.14` [mine-sweeper.html](https://github.com/WaterMinCho/JS/blob/main/mine-sweeper.html)
@@ -18,7 +56,7 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 - 기본적으로 좌클릭을 했을 때랑 우클릭을 했을 때를 나눠서 처리해야 한다.
 - <br>
-  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118238110-0d597e00-b4d3-11eb-9d41-fe93fd5d943d.png height = 450px width = 550x></p><p align="center"><img src = https://user-images.githubusercontent.com/74204327/118239686-11869b00-b4d5-11eb-96ef-66e8e38a1473.png height = 250px width = 550x></p><br>
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118597672-f2934c00-b7e7-11eb-8db1-3b9a8595c87e.png height = 450px width = 550x></p><p align="center"><img src = https://user-images.githubusercontent.com/74204327/118239686-11869b00-b4d5-11eb-96ef-66e8e38a1473.png height = 250px width = 550x></p><br>
 
 ### **배운 개념**
 
@@ -58,7 +96,9 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
   ```
 
   이런 식으로 커버할 수 있으며, 또는 접근자 . 앞에 ?를 붙이면 조건접근이 가능하다.<br>
+
 - ## nullish coalescing operator(null 병합 연산자)
+
   `??, ||, &&`를 추가로 설명하면 기존에 and, or처럼 판단을 해왔지만 엄밀히 논리적으로 따지면 아래와 같다.
 
   - target.textContent = A || B; <br>`A가 존재하지 않으면(false면) B.` `존재하면(true면) A.`

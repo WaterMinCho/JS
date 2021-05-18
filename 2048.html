@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2048</title>
+    <style>
+      #table {
+        border-collapse: collapse;
+        user-select: none;
+      }
+
+      #table td {
+        border: 10px solid #bbada0;
+        width: 116px;
+        height: 128px;
+        font-size: 50px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      #score {
+        user-select: none; /*마우스 블록 차단.*/
+        font-size: 50px;
+        color: navy;
+      }
+      #back {
+        width: 100px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      .color-2 {
+        background-color: #eee4da;
+        color: #776e55;
+      }
+      .color-4 {
+        background-color: #eee1c9;
+        color: #776e55;
+      }
+      .color-8 {
+        background-color: #f3b27a;
+        color: "white";
+      }
+      .color-16 {
+        background-color: #f69664;
+        color: "white";
+      }
+      .color-32 {
+        background-color: #f77c5f;
+        color: "white";
+      }
+      .color-64 {
+        background-color: #f75f3b;
+        color: "white";
+      }
+      .color-128 {
+        background-color: #edd073;
+        color: #776e55;
+      }
+      .color-256 {
+        background-color: #edcc62;
+        color: #776e55;
+      }
+      .color-512 {
+        background-color: #edc950;
+        color: #776e55;
+      }
+      .color-1024 {
+        background-color: #edc53f;
+        color: #776e55;
+      }
+      .color-2048 {
+        background-color: #edc22e;
+        color: #776e55;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="table"></table>
+    <div>
+      <span id="score">0점</span>
+      <button id="back">되돌리기</button>
+    </div>
+    <script>
+      const $table = document.querySelector("#table");
+      const $score = document.querySelector("#score");
+      const $back = document.querySelector("#back");
+      let data = [];
+      const history = [];
+
+      $back.addEventListener("click", () => {
+        const prevData = history.pop();
+        if (!prevData) return; //최근 데이터 없으면 종료.
+        $score.textContent = prevData.score;
+        data = prevData.table;
+        draw();
+      });
+      //$table -> $fragment -> $tr -> $td
+      function startGame() {
+        //fragment는 화면에 안띄우고 메모리에 저장한다.
+        const $fragment = document.createDocumentFragment();
+        [1, 2, 3, 4].forEach(function () {
+          const rowData = [];
+          data.push(rowData);
+          const $tr = document.createElement("tr");
+          [1, 2, 3, 4].forEach(() => {
+            rowData.push(0);
+            const $td = document.createElement("td");
+            $tr.appendChild($td);
+          });
+          $fragment.appendChild($tr);
+        });
+        //이때까지 fragment가 메모리 상에 묶어둔다.
+        $table.appendChild($fragment); //table에 fragment호출.
+        put2ToRandomCell();
+        draw();
+      }
+
+      function put2ToRandomCell() {
+        const emptyCells = []; // [i1,j1], [i2,j2], [i3,j3],...
+        data.forEach(function (rowData, i) {
+          rowData.forEach(function (cellData, j) {
+            if (!cellData) {
+              //빈칸이면 emptyCells에 push한다.
+              emptyCells.push([i, j]);
+            }
+          });
+        });
+        const randomCell =
+          emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        data[randomCell[0]][randomCell[1]] = 2; //빈칸들 중 하나에 2를 넣는다.
+      }
+
+      function draw() {
+        data.forEach((rowData, i) => {
+          rowData.forEach((cellData, j) => {
+            const $target = $table.children[i].children[j];
+            if (cellData > 0) {
+              //data가 0이 아니면
+              $target.textContent = cellData;
+              $target.className = `color-` + cellData;
+            } else {
+              //data가 0이면
+              $target.textContent = "";
+              $target.className = "";
+            }
+          });
+        });
+      }
+
+      startGame();
+
+      //   data = [
+      //     [32, 2, 4, 2],
+      //     [64, 4, 8, 4],
+      //     [2, 1024, 1024, 32],
+      //     [32, 16, 64, 4],
+      //   ];
+      //   draw();
+      function moveCells(direction) {
+        history.push({
+          table: JSON.parse(JSON.stringify(data)),
+          score: $score.textContent,
+        });
+        switch (direction) {
+          case "left":
+            {
+              //case문 안에서 변수선언했을 때 중괄호를 쓰는게 좋다.
+              //왜냐하면 아래 const newData는 블록 스코프이기 때문에 케이스마다 똑같은 이름을 가진 변수를 선언할 수 있기 때문이다.
+              const newData = [[], [], [], []];
+              data.forEach((rowData, i) => {
+                rowData.forEach((cellData, j) => {
+                  if (cellData) {
+                    const currentRow = newData[i];
+                    const prevData = currentRow[currentRow.length - 1];
+                    if (prevData === cellData) {
+                      //이전 값과 지금 값이 같으면
+                      const score = parseInt($score.textContent);
+                      $score.textContent =
+                        score + currentRow[currentRow.length - 1] * 2;
+                      currentRow[currentRow.length - 1] *= -2; //같으면 -2를 곱한다 그럼 -4와 4는 다르니까 아래 else케이스로 넘어간다.
+                    } else {
+                      newData[i].push(cellData);
+                    }
+                  }
+                });
+              });
+              console.log(newData);
+              [1, 2, 3, 4].forEach((rowData, i) => {
+                [1, 2, 3, 4].forEach((cellData, j) => {
+                  data[i][j] = Math.abs(newData[i][j]) || 0; //그릴 때 절댓값으로 -4 4 8을 4 4 8로 변경
+                });
+              });
+            }
+            break;
+          case "right":
+            {
+              const newData = [[], [], [], []];
+              data.forEach((rowData, i) => {
+                rowData.forEach((cellData, j) => {
+                  //check
+                  if (rowData[3 - j]) {
+                    const currentRow = newData[i]; //check
+                    const prevData = currentRow[currentRow.length - 1];
+                    //check
+                    if (prevData === rowData[3 - j]) {
+                      const score = parseInt($score.textContent);
+                      $score.textContent =
+                        score + currentRow[currentRow.length - 1] * 2;
+                      currentRow[currentRow.length - 1] *= -2;
+                    } else {
+                      newData[i].push(rowData[3 - j]); //check
+                    }
+                  }
+                });
+              });
+              console.log(newData);
+              [1, 2, 3, 4].forEach((rowData, i) => {
+                [1, 2, 3, 4].forEach((cellData, j) => {
+                  data[i][3 - j] = Math.abs(newData[i][j]) || 0; //check
+                });
+              });
+            }
+            break;
+
+          case "up": {
+            const newData = [[], [], [], []];
+            data.forEach((rowData, i) => {
+              rowData.forEach((cellData, j) => {
+                //check
+                if (cellData) {
+                  const currentRow = newData[j]; //check
+                  const prevData = currentRow[currentRow.length - 1];
+                  //check
+                  if (prevData === cellData) {
+                    const score = parseInt($score.textContent);
+                    $score.textContent = `${
+                      score + currentRow[currentRow.length - 1] * 2
+                    } 점`;
+                    currentRow[currentRow.length - 1] *= -2;
+                  } else {
+                    newData[j].push(cellData); //check
+                  }
+                }
+              });
+            });
+            console.log(newData);
+            [1, 2, 3, 4].forEach((rowData, i) => {
+              [1, 2, 3, 4].forEach((cellData, j) => {
+                data[j][i] = Math.abs(newData[i][j]) || 0; //check
+              });
+            });
+            break;
+          }
+
+          case "down": {
+            const newData = [[], [], [], []];
+            data.forEach((rowData, i) => {
+              rowData.forEach((cellData, j) => {
+                //check
+                if (data[3 - i][j]) {
+                  const currentRow = newData[j]; //check
+                  const prevData = currentRow[currentRow.length - 1];
+                  //check
+                  if (prevData === data[3 - i][j]) {
+                    const score = parseInt($score.textContent);
+                    $score.textContent =
+                      score + currentRow[currentRow.length - 1] * 2;
+                    currentRow[currentRow.length - 1] *= -2;
+                  } else {
+                    newData[j].push(data[3 - i][j]); //check
+                  }
+                }
+              });
+            });
+            console.log(newData);
+            [1, 2, 3, 4].forEach((rowData, i) => {
+              [1, 2, 3, 4].forEach((cellData, j) => {
+                data[3 - j][i] = Math.abs(newData[i][j]) || 0; //check
+              });
+            });
+            break;
+          }
+        }
+        if (data.flat().includes(2048)) {
+          //승리 시
+          draw();
+          setTimeout(() => {
+            alert(`축하합니다. 2048을 만들었습니다! ${score.textContent}점`);
+          }, 0);
+        } else if (!data.flat().includes(0)) {
+          //빈 칸이 없을 때(0이 없을 때)
+          alert(`패배했습니다... ${score.textContent}점`);
+        } else {
+          put2ToRandomCell();
+          draw();
+        }
+      }
+
+      //키보드 이벤트는 비교적 쉽다.
+      window.addEventListener("keyup", (event) => {
+        if (event.key === "ArrowUp") {
+          moveCells("up");
+        } else if (event.key === "ArrowDown") {
+          moveCells("down");
+        } else if (event.key === "ArrowLeft") {
+          moveCells("left");
+        } else if (event.key === "ArrowRight") {
+          moveCells("right");
+        }
+      });
+
+      //마우스 이벤트는 조금 복잡하다. 마우스 이동 방향 각도의 기준을 명확히 하고 판단해야 한다.
+      //아래의 이벤트는 드래그를 해서 첫 클릭 좌표가 기준 좌표고 그 뒤에 마우스를 뗐을 때의 좌표를 이동좌표로 지정하고 그 값을 비교하여 동작을 지정한다.
+      let startCoord;
+      window.addEventListener("mousedown", (event) => {
+        startCoord = [event.clientX, event.clientY];
+      });
+
+      window.addEventListener("mouseup", (event) => {
+        //기준 좌표에서 diffX와 diffY값이 양수인지 음수인지 확인하면 최종좌표를 확인할 수 있다.
+        const endCoord = [event.clientX, event.clientY];
+        const diffX = endCoord[0] - startCoord[0];
+        const diffY = endCoord[1] - startCoord[1];
+        //abs는 절댓값. x와 y가 같으면 기울기가 45도선상에 있는 것이다.
+        if (diffX < 0 && Math.abs(diffX) > Math.abs(diffY)) {
+          moveCells("left");
+        } else if (diffX > 0 && Math.abs(diffX) > Math.abs(diffY)) {
+          moveCells("right");
+        } else if (diffX > 0 && Math.abs(diffX) <= Math.abs(diffY)) {
+          moveCells("down");
+        } else if (diffX < 0 && Math.abs(diffX) <= Math.abs(diffY)) {
+          moveCells("up");
+        }
+      });
+    </script>
+  </body>
+</html>
