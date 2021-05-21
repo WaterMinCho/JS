@@ -11,6 +11,24 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 <br>
 
+## **두더지 잡기 게임 (자바스크립트 프로젝트 3회차)**
+
+### `2021.05.21` [wrack-a-mole.html](https://github.com/WaterMinCho/JS/blob/main/wrack-a-mole.html)
+
+<br><br>
+
+### **플로우**
+
+- <br>
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/119090679-e2c57300-ba46-11eb-8f35-1611840a1f71.png height = 450px width = 600x ></p> 
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/119090995-55cee980-ba47-11eb-981c-cd38ec1665a0.png height = 400px width = 300x ></p>
+  <br>
+  <br>
+
+### **배운 개념**
+
+<br>
+
 ## **2048게임 (자바스크립트 프로젝트 2회차)**
 
 ### `2021.05.18` [2048.html](https://github.com/WaterMinCho/JS/blob/main/2048.html)
