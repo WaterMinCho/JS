@@ -11,8 +11,9 @@
         position: relative;
         width: 200px;
         height: 200px;
-        background: yellow;
+        background: white;
         overflow: hidden;
+        user-select: none; /*마우스 블록 차단.*/
       }
       .gopher,
       .bomb {
@@ -61,7 +62,9 @@
   </head>
   <body>
     <div>
-      <span id="timer">8</span>초&nbsp; <span id="score">0</span>점
+      <span id="timer">0</span>초&nbsp;&nbsp; life:<span id="life">3</span
+      >&nbsp;&nbsp; <span id="score">0</span>점
+
       <button id="start">시작</button>
     </div>
     <div id="game">
@@ -126,5 +129,108 @@
         </div>
       </div>
     </div>
+    <script>
+      const $timer = document.querySelector("#timer");
+      const $score = document.querySelector("#score");
+      const $game = document.querySelector("#game");
+      const $life = document.querySelector("#life");
+      const $start = document.querySelector("#start");
+      const $$cells = document.querySelectorAll(".cell");
+
+      const holes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      let started = false;
+      let score = 0;
+      let time = 10;
+      let life = 3;
+      let timerId;
+      let tickId;
+
+      $start.addEventListener("click", () => {
+        if (started) return;
+        started = true;
+        console.log("시작");
+        timerId = setInterval(() => {
+          time = (time * 10 - 1) / 10; //소수점을 계산하면 정수로 빼주고 10,100,1000...을 나누는게 좋다.
+          $timer.textContent = time;
+          if (time === 0) {
+            setTimeout(() => {
+              clearInterval(timerId);
+              clearInterval(tickId);
+              alert(`Game Over. Score : ${score}점`);
+            }, 50);
+          }
+        }, 100);
+        tickId = setInterval(tick, 1000);
+        tick();
+      });
+
+      //버그 발생. remove와 add가 계속 겹침.
+      //백그라운드에서 setInterval이 계속 남아있고 hidden이 remove되자마자 hidden이 add됨.
+      // hidden클래스를 추가하는 1초 타이머를 실행하지 않으면 된다.
+
+      let gopherPercent = 0.3; //30퍼센트
+      let bombPercent = 0.5; //20퍼센트. 확률을 쓸 때는 누적식으로 하면 편하다.(if와 else if의 원리.)
+      function tick() {
+        holes.forEach((hole, index) => {
+          // hole은 참조관계를 끊어야 하기 떄문에 holes와 다른 변수 사용.
+          if (hole) return; //무언가 실행되면 종료.
+          const randomValue = Math.random();
+          if (randomValue < gopherPercent) {
+            const $gopher = $$cells[index].querySelector(".gopher");
+            holes[index] = setTimeout(() => {
+              //참조관계로 수정하려면 holes사용.
+              //1초 뒤에 사라짐.
+              $gopher.classList.add("hidden");
+              holes[index] = 0;
+            }, 1000);
+
+            $gopher.classList.remove("hidden");
+          } else if (randomValue < bombPercent) {
+            const $bomb = $$cells[index].querySelector(".bomb");
+            holes[index] = setTimeout(() => {
+              $bomb.classList.add("hidden");
+              holes[index] = 0;
+            }, 1000);
+            $bomb.classList.remove("hidden");
+          }
+        });
+      }
+
+      $$cells.forEach(($cell, index) => {
+        $cell.querySelector(".gopher").addEventListener("click", (event) => {
+          if (!event.target.classList.contains("dead")) {
+            score += 1;
+            $score.textContent = score;
+          }
+          //두더지 클릭 이벤트
+          event.target.classList.add("dead");
+          event.target.classList.add("hidden");
+          clearTimeout(holes[index]);
+          setTimeout(() => {
+            holes[index] = 0;
+            event.target.classList.remove("dead");
+          }, 1000);
+        });
+        $cell.querySelector(".bomb").addEventListener("click", (event) => {
+          //폭탄 클릭 이벤트
+          event.target.classList.add("boom");
+          event.target.classList.add("hidden");
+          clearTimeout(holes[index]);
+          setTimeout(() => {
+            holes[index] = 0;
+            event.target.classList.remove("boom");
+          }, 1000);
+          life--;
+          $life.textContent = life;
+          if (life === 0) {
+            clearInterval(timerId);
+            clearInterval(tickId);
+            setTimeout(() => {
+              alert(`Game Over Score: ${score}`);
+            });
+          }
+        });
+      });
+    </script>
   </body>
 </html>
