@@ -2,9 +2,12 @@
 # **`JavaScript`**
 
 Study for javascript by WaterMincho.<br>
-민초의 자바스크립트 공부.<br><br>
+물민초의 자바스크립트 공부.<br><br>
 
 README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록이기 때문에 일단 최신 순으로 정리하였다.
+
+## 2021.05.26 개발블로그를 개설했다. 아래의 공부 내용을 순차적으로 옮기고 앞으로 개발하는 부분은 블로그에 기록할 예정이다. 링크는 [여기에 있다.](https://watermincho.github.io/)
+
 <br>
 
 ---
