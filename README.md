@@ -101,7 +101,8 @@ README는 나중에 위키나 개인 블로그로 정리 하기 전 일괄기록
 
 - 기본적으로 좌클릭을 했을 때랑 우클릭을 했을 때를 나눠서 처리해야 한다.
 - <br>
-  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118597672-f2934c00-b7e7-11eb-8db1-3b9a8595c87e.png height = 450px width = 550x></p><p align="center"><img src = https://user-images.githubusercontent.com/74204327/118239686-11869b00-b4d5-11eb-96ef-66e8e38a1473.png height = 250px width = 550x></p><br>
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118597672-f2934c00-b7e7-11eb-8db1-3b9a8595c87e.png height = 450px width = 550x></p>
+  <p align="center"><img src = https://user-images.githubusercontent.com/74204327/118239686-11869b00-b4d5-11eb-96ef-66e8e38a1473.png height = 250px width = 550x></p><br>
 
 ### **배운 개념**
 
